@@ -36,17 +36,27 @@
             border-radius: 50%;
             margin-bottom: 10px;
         }
-        .form-floating:focus-within {
-            z-index: 2;
+        .demo-badge {
+            background-color: #ffc107;
+            color: #000;
+            font-size: 0.8rem;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
         }
         .btn-login {
             font-weight: bold;
             letter-spacing: 1px;
             padding: 12px;
+            transition: all 0.3s;
         }
-        #alertBox {
-            display: none;
+        .btn-login:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
         }
+        #alertBox { display: none; }
     </style>
 </head>
 <body>
@@ -55,10 +65,11 @@
         <div class="login-header">
             <i class="fas fa-user-lock"></i>
             <h3 class="fw-bold text-dark">Área Restrita</h3>
-            <p class="text-muted">Informe suas credenciais</p>
+            <div class="demo-badge"><i class="fas fa-flask me-2"></i>MODO DEMONSTRAÇÃO</div>
+            <p class="text-muted small">Dados preenchidos automaticamente.</p>
         </div>
 
-        <div id="alertBox" class="alert alert-danger text-center p-2 small">
+        <div id="alertBox" class="alert alert-danger text-center p-2 small mb-3">
             <i class="fas fa-exclamation-circle me-1"></i> CPF ou Senha incorretos!
         </div>
 
@@ -67,7 +78,7 @@
                 <label class="form-label fw-bold small text-secondary">CPF</label>
                 <div class="input-group">
                     <span class="input-group-text bg-light"><i class="fas fa-id-card text-muted"></i></span>
-                    <input type="text" class="form-control" id="cpf" placeholder="000.000.000-00" maxlength="14" required>
+                    <input type="text" class="form-control" id="cpf" value="123.456.789-00" maxlength="14" required>
                 </div>
             </div>
 
@@ -75,13 +86,13 @@
                 <label class="form-label fw-bold small text-secondary">SENHA</label>
                 <div class="input-group">
                     <span class="input-group-text bg-light"><i class="fas fa-key text-muted"></i></span>
-                    <input type="password" class="form-control" id="senha" placeholder="••••••••" required>
+                    <input type="password" class="form-control" id="senha" value="123456" required>
                 </div>
             </div>
 
             <div class="d-grid gap-2">
                 <button type="submit" class="btn btn-primary btn-login shadow-sm">
-                    ENTRAR <i class="fas fa-arrow-right ms-2"></i>
+                    ENTRAR NO SISTEMA <i class="fas fa-arrow-right ms-2"></i>
                 </button>
             </div>
 
@@ -94,56 +105,54 @@
     </div>
 
     <script>
-        // 1. MÁSCARA DE CPF (Formata enquanto digita)
+        // 1. MÁSCARA DE CPF
         const inputCPF = document.getElementById('cpf');
         
         inputCPF.addEventListener('input', function(e) {
-            let value = e.target.value.replace(/\D/g, ""); // Remove tudo que não é número
-            if (value.length > 11) value = value.slice(0, 11); // Limita a 11 números
-
-            // Adiciona os pontos e traço
+            let value = e.target.value.replace(/\D/g, "");
+            if (value.length > 11) value = value.slice(0, 11);
             value = value.replace(/(\d{3})(\d)/, "$1.$2");
             value = value.replace(/(\d{3})(\d)/, "$1.$2");
             value = value.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-
             e.target.value = value;
         });
 
-        // 2. LÓGICA DE LOGIN COM CRIPTOGRAFIA (Simulada)
+        // 2. LÓGICA DE LOGIN
         async function realizarLogin(event) {
-            event.preventDefault(); // Não recarrega a página
+            event.preventDefault(); 
             
             const cpf = document.getElementById('cpf').value;
             const senha = document.getElementById('senha').value;
             const alertBox = document.getElementById('alertBox');
+            const btn = document.querySelector('.btn-login');
 
-            // Vamos simular que a senha correta é "123456"
-            // Geramos o hash SHA-256 da senha digitada
+            // Hash da senha "123456"
             const hashSenhaDigitada = await sha256(senha);
-            
-            // Hash da senha "123456" (Isso viria do Banco de Dados num sistema real)
-            const hashSenhaCorreta = "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92";
+            const hashSenhaCorreta = "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92"; // Hash de 123456
 
-            // Validação simples (Aceita qualquer CPF preenchido corretamente para Demo)
+            // Validação simples (Aceita qualquer CPF válido de 14 dígitos e a senha correta)
             if (cpf.length === 14 && hashSenhaDigitada === hashSenhaCorreta) {
-                // Sucesso!
-                document.querySelector('.btn-login').innerHTML = '<i class="fas fa-spinner fa-spin"></i> Validando...';
+                // Sucesso - Animação no botão
+                btn.innerHTML = '<i class="fas fa-circle-notch fa-spin me-2"></i> Validando...';
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-success');
+                
                 setTimeout(() => {
                     window.location.href = "dashboard.html";
-                }, 1000);
+                }, 800);
             } else {
                 // Erro
                 alertBox.style.display = 'block';
-                // Treme a caixa de login (efeito visual)
-                document.querySelector('.login-card').animate([
-                    { transform: 'translateX(-10px)' },
-                    { transform: 'translateX(10px)' },
+                // Animação de tremor
+                const card = document.querySelector('.login-card');
+                card.animate([
+                    { transform: 'translateX(-5px)' },
+                    { transform: 'translateX(5px)' },
                     { transform: 'translateX(0)' }
                 ], { duration: 300 });
             }
         }
 
-        // Função auxiliar para criar Hash SHA-256 (Nativa do Navegador)
         async function sha256(message) {
             const msgBuffer = new TextEncoder().encode(message);
             const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
