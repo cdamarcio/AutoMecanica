@@ -2,169 +2,117 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>MAZZSYS ERP - DASHBOARD PRO</title>
+    <title>MAZZSYS ERP - DATA PRO</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --dark: #1e293b; --accent: #3b82f6; --success: #10b981; --warning: #f59e0b; }
+        :root { --dark: #1e293b; --accent: #3b82f6; --success: #10b981; }
         body { font-family: 'Inter', sans-serif; background: #f8fafc; margin: 0; display: flex; }
-        
-        /* Sidebar Moderna */
-        .sidebar { width: 280px; height: 100vh; background: var(--dark); color: white; position: fixed; padding: 25px; box-shadow: 4px 0 10px rgba(0,0,0,0.1); }
-        .sidebar h2 { font-weight: 800; letter-spacing: -1px; margin-bottom: 40px; color: var(--accent); display: flex; align-items: center; gap: 10px; }
-        .sidebar button { width: 100%; padding: 14px; margin-bottom: 10px; background: rgba(255,255,255,0.05); color: #94a3b8; border: none; cursor: pointer; text-align: left; border-radius: 12px; transition: 0.3s; font-weight: 500; }
-        .sidebar button:hover, .btn-active { background: var(--accent) !important; color: white !important; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4); }
-
-        /* Conteúdo */
+        .sidebar { width: 280px; height: 100vh; background: var(--dark); color: white; position: fixed; padding: 25px; }
+        .sidebar h2 { color: var(--accent); font-weight: 800; margin-bottom: 30px; text-align: center; }
+        .sidebar button { width: 100%; padding: 12px; margin-bottom: 8px; background: rgba(255,255,255,0.05); color: #94a3b8; border: none; cursor: pointer; text-align: left; border-radius: 10px; transition: 0.3s; }
+        .sidebar button:hover, .btn-active { background: var(--accent) !important; color: white !important; }
         .content { margin-left: 280px; padding: 40px; width: calc(100% - 280px); }
-        .aba { display: none; animation: fadeIn 0.4s ease-out; }
-        .aba.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* Cards Visuais */
-        .stat-card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; position: relative; overflow: hidden; }
-        .stat-card h3 { font-size: 28px; font-weight: 700; margin: 10px 0; }
-        .stat-card i { position: absolute; right: 20px; top: 20px; font-size: 24px; opacity: 0.2; }
-        .card-blue { border-bottom: 5px solid var(--accent); }
-        .card-green { border-bottom: 5px solid var(--success); }
-        .card-orange { border-bottom: 5px solid var(--warning); }
-
-        /* Tabelas */
-        .table-area { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); margin-top: 30px; }
-        .table thead th { background: #f8fafc; border: none; color: #64748b; font-size: 12px; text-transform: uppercase; padding: 15px; }
-        .table td { vertical-align: middle; padding: 15px; border-color: #f1f5f9; }
-        .placa { background: #1e293b; color: white; padding: 4px 8px; border-radius: 6px; font-family: 'Roboto Mono', monospace; font-weight: bold; font-size: 12px; }
-        
-        .progress { height: 8px; border-radius: 10px; background: #f1f5f9; }
+        .aba { display: none; }
+        .aba.active { display: block; animation: fadeIn 0.3s; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .table-area { background: white; border-radius: 15px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); max-height: 70vh; overflow-y: auto; }
+        .placa { background: #1e293b; color: white; padding: 3px 7px; border-radius: 5px; font-family: monospace; font-size: 12px; }
+        .badge-status { font-size: 11px; padding: 5px 10px; border-radius: 20px; }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
-        <h2><i class="fas fa-microchip"></i> MAZZSYS</h2>
-        <button onclick="tab('dash')" id="t-dash" class="btn-active"><i class="fas fa-chart-line me-2"></i> Dashboard</button>
+        <h2>MAZZSYS</h2>
+        <button onclick="tab('dash')" id="t-dash" class="btn-active"><i class="fas fa-home me-2"></i> Dashboard</button>
         <button onclick="tab('os')" id="t-os"><i class="fas fa-file-invoice me-2"></i> Ordens (36)</button>
-        <button onclick="tab('est')" id="t-est"><i class="fas fa-boxes-stacked me-2"></i> Estoque</button>
-        <button onclick="tab('cli')" id="t-cli"><i class="fas fa-users me-2"></i> Clientes (500)</button>
+        <button onclick="tab('est')" id="t-est"><i class="fas fa-boxes-stacked me-2"></i> Estoque (Vários)</button>
+        <button onclick="tab('cli')" id="t-cli"><i class="fas fa-users me-2"></i> Clientes (50)</button>
         <button onclick="tab('fin')" id="t-fin"><i class="fas fa-wallet me-2"></i> Financeiro</button>
     </div>
 
     <div class="content">
-        
         <div id="dash" class="aba active">
-            <h2 class="fw-bold mb-4 text-dark">Painel de Gestão</h2>
+            <h2 class="fw-bold mb-4">Métricas de Performance</h2>
             <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="stat-card card-blue">
-                        <i class="fas fa-tools"></i>
-                        <small class="text-muted fw-bold">O.S. EM ANDAMENTO</small>
-                        <h3>36</h3>
-                        <div class="progress mt-2"><div class="progress-bar bg-primary" style="width: 75%"></div></div>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="stat-card card-green">
-                        <i class="fas fa-dollar-sign"></i>
-                        <small class="text-muted fw-bold">CAIXA DISPONÍVEL</small>
-                        <h3 class="text-success">R$ 15.420</h3>
-                        <small class="text-success"><i class="fas fa-caret-up"></i> +12% este mês</small>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="stat-card card-orange">
-                        <i class="fas fa-warehouse"></i>
-                        <small class="text-muted fw-bold">OCUPAÇÃO PÁTIO</small>
-                        <h3>85%</h3>
-                        <div class="progress mt-2"><div class="progress-bar bg-warning" style="width: 85%"></div></div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row mt-4">
-                <div class="col-md-12">
-                    <div class="table-area">
-                        <h5 class="fw-bold mb-3">Atividade Recente</h5>
-                        <p class="text-muted small">Monitoramento em tempo real de serviços e estoque.</p>
-                        <hr>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <span><i class="fas fa-check-circle text-success me-2"></i> Sistema MazzSys Operacional</span>
-                            <span class="badge bg-light text-dark">Versão 2.0 Industrial</span>
-                        </div>
-                    </div>
-                </div>
+                <div class="col-md-4"><div class="card p-4 border-0 shadow-sm"><h6>O.S. TOTAIS</h6><h3>36</h3></div></div>
+                <div class="col-md-4"><div class="card p-4 border-0 shadow-sm"><h6>DATABASE CLIENTES</h6><h3>50</h3></div></div>
+                <div class="col-md-4"><div class="card p-4 border-0 shadow-sm text-success"><h6>SALDO LIQUIDO</h6><h3>R$ 15.420</h3></div></div>
             </div>
         </div>
 
         <div id="os" class="aba">
-            <h2 class="fw-bold mb-4">Ordens de Serviço (36)</h2>
+            <h2 class="fw-bold mb-4">Listagem de O.S.</h2>
             <div class="table-area">
                 <table class="table table-hover">
-                    <thead><tr><th>Nº OS</th><th>Cliente</th><th>Veículo</th><th>Status</th><th>Valor</th></tr></thead>
-                    <tbody>
-                        <tr><td>#3001</td><td>Márcio Rodrigues</td><td>Hilux SW4 <span class="placa">MZZ-2026</span></td><td><span class="badge bg-success">Finalizado</span></td><td>R$ 450,00</td></tr>
-                        <tr><td>#3002</td><td>Felipe Oliveira</td><td>Corolla <span class="placa">FEL-1010</span></td><td><span class="badge bg-warning">Execução</span></td><td>R$ 1.200,00</td></tr>
-                        <tr><td>#3003</td><td>Adriano Silva</td><td>Fiat Toro <span class="placa">ADR-4589</span></td><td><span class="badge bg-danger">Peças</span></td><td>R$ 890,00</td></tr>
-                        <tr><td colspan="5" class="text-center py-4 text-muted">... listagem de 36 registros ativos no sistema ...</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div id="est" class="aba">
-            <h2 class="fw-bold mb-4">Estoque de Peças</h2>
-            <div class="table-area">
-                <table class="table">
-                    <thead><tr><th>Peça</th><th>Quantidade</th><th>Nível</th><th>Ação</th></tr></thead>
-                    <tbody>
-                        <tr><td>Óleo 5W30</td><td>120 un</td><td><div class="progress" style="width:100px"><div class="progress-bar bg-success" style="width:100%"></div></div></td><td><span class="badge bg-light text-dark">OK</span></td></tr>
-                        <tr><td>Filtro Corolla</td><td>3 un</td><td><div class="progress" style="width:100px"><div class="progress-bar bg-danger" style="width:20%"></div></div></td><td><span class="badge bg-danger">COMPRAR</span></td></tr>
-                    </tbody>
+                    <thead class="sticky-top bg-white"><tr><th>OS</th><th>Cliente</th><th>Veículo</th><th>Status</th><th>Total</th></tr></thead>
+                    <tbody id="listaOS"></tbody>
                 </table>
             </div>
         </div>
 
         <div id="cli" class="aba">
-            <h2 class="fw-bold mb-4">Base de Clientes (500)</h2>
-            <div class="table-area" style="max-height: 500px; overflow-y: auto;">
+            <h2 class="fw-bold mb-4">Base de Clientes</h2>
+            <div class="table-area">
                 <table class="table table-hover">
-                    <thead><tr><th>Nome</th><th>Veículo</th><th>Placa</th></tr></thead>
+                    <thead class="sticky-top bg-white"><tr><th>ID</th><th>Nome</th><th>Veículo / Placa</th></tr></thead>
+                    <tbody id="listaClientes"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="est" class="aba">
+            <h2 class="fw-bold mb-4">Inventário</h2>
+            <div class="table-area">
+                <table class="table">
+                    <thead><tr><th>Item</th><th>Qtd</th><th>Status</th></tr></thead>
                     <tbody>
-                        <tr><td>Márcio Rodrigues</td><td>Hilux SW4</td><td><span class="placa">MZZ-2026</span></td></tr>
-                        <tr><td>Felipe Oliveira</td><td>Toyota Corolla</td><td><span class="placa">FEL-1010</span></td></tr>
-                        <tr><td colspan="3" class="text-center text-muted">500 Registros Carregados</td></tr>
+                        <tr><td>Óleo 5W30</td><td>120 un</td><td><span class="badge bg-success">OK</span></td></tr>
+                        <tr><td>Filtro Óleo</td><td>5 un</td><td><span class="badge bg-danger">REPOR</span></td></tr>
+                        <tr><td>Pastilha Hilux</td><td>22 un</td><td><span class="badge bg-success">OK</span></td></tr>
+                        <tr><td>Bateria 60Ah</td><td>15 un</td><td><span class="badge bg-success">OK</span></td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
         <div id="fin" class="aba">
-            <h2 class="fw-bold mb-4">Financeiro Profissional</h2>
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <div class="stat-card" style="background: linear-gradient(135deg, #10b981, #059669); color: white;">
-                        <small class="opacity-75 fw-bold">RECEITA MENSAL</small>
-                        <h3>R$ 28.500</h3>
-                        <i class="fas fa-arrow-up" style="opacity: 0.5;"></i>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="stat-card" style="background: linear-gradient(135deg, #ef4444, #dc2626); color: white;">
-                        <small class="opacity-75 fw-bold">DESPESAS TOTAIS</small>
-                        <h3>R$ 13.079</h3>
-                        <i class="fas fa-arrow-down" style="opacity: 0.5;"></i>
-                    </div>
-                </div>
+            <h2 class="fw-bold mb-4">Fluxo de Caixa</h2>
+            <div class="card p-4 border-0 shadow-sm mb-4">
+                <h4 class="text-success">Total em Caixa: R$ 15.420,50</h4>
             </div>
         </div>
-
     </div>
 
     <script>
+        const nomes = ["Márcio Oliveira", "Felipe Rodrigues", "Adriano Silva", "Carla Mendes", "Roberto Souza", "Ana Paula", "Ricardo Santos", "Juliana Costa", "Marcos Pereira", "Patrícia Souza"];
+        const carros = ["Hilux SW4", "Corolla XEi", "Fiat Toro", "Jeep Compass", "Honda Civic", "VW Golf", "S10 High Country", "Onix Turbo", "Ford Ranger", "Hyundai HB20"];
+        
         function tab(id) {
             document.querySelectorAll('.aba').forEach(a => a.classList.remove('active'));
             document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('btn-active'));
             document.getElementById(id).classList.add('active');
             document.getElementById('t-' + id).classList.add('btn-active');
+        }
+
+        window.onload = function() {
+            // Povoar 50 Clientes
+            let cliHtml = "";
+            for(let i=1; i<=50; i++) {
+                let nome = nomes[i % 10];
+                let carro = carros[i % 10];
+                cliHtml += `<tr><td>#${100+i}</td><td>${nome} ${i}</td><td>${carro} <span class="placa">MZZ-${2000+i}</span></td></tr>`;
+            }
+            document.getElementById('listaClientes').innerHTML = cliHtml;
+
+            // Povoar 36 OS
+            let osHtml = "";
+            for(let i=1; i<=36; i++) {
+                let status = i % 3 == 0 ? '<span class="badge bg-success badge-status">Finalizado</span>' : '<span class="badge bg-warning text-dark badge-status">Em Execução</span>';
+                osHtml += `<tr><td>#30${i}</td><td>Cliente ${i}</td><td>Veículo Mod ${i}</td><td>${status}</td><td>R$ ${450 + (i*10)},00</td></tr>`;
+            }
+            document.getElementById('listaOS').innerHTML = osHtml;
         }
     </script>
 </body>
