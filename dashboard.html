@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MazzSys ERP - Gestão Integrada</title>
+    <title>MazzSys ERP - Gestão de Oficina</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -26,14 +26,13 @@
 
         .main-content { margin-left: 260px; padding: 30px; transition: 0.3s; }
 
-        /* Alternância de Telas */
         .page-section { display: none; }
         .page-section.active { display: block; animation: fadeIn 0.3s; }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        .stock-low { color: #dc3545; font-weight: bold; }
         .placa-badge { background: #e9ecef; color: #495057; font-weight: 700; font-family: monospace; padding: 2px 6px; border-radius: 4px; border: 1px solid #ced4da; font-size: 0.85rem; }
+        .stock-low { color: #dc3545; font-weight: bold; }
         
         @media (max-width: 768px) {
             .sidebar { margin-left: -260px; }
@@ -60,7 +59,7 @@
             <a onclick="showSection('resumo')" id="link-resumo" class="active"><i class="fas fa-chart-line me-2"></i> Dashboard</a>
             <a onclick="showSection('estoque')" id="link-estoque"><i class="fas fa-box me-2"></i> Estoque</a>
             <a onclick="showSection('clientes')" id="link-clientes"><i class="fas fa-users me-2"></i> Clientes</a>
-            <a href="#"><i class="fas fa-clipboard-list me-2"></i> Ordens de Serviço</a>
+            <a onclick="showSection('servicos')" id="link-servicos"><i class="fas fa-clipboard-list me-2"></i> Ordens de Serviço</a>
             <hr class="mx-3 border-secondary">
             <a href="index.html" class="text-danger"><i class="fas fa-sign-out-alt me-2"></i> Sair</a>
         </nav>
@@ -73,14 +72,14 @@
             <div class="row g-4">
                 <div class="col-md-4">
                     <div class="card border-0 shadow-sm p-4 text-center">
-                        <small class="text-muted fw-bold">TOTAL CLIENTES</small>
+                        <small class="text-muted fw-bold">O.S. ABERTAS</small>
                         <h2 class="text-primary fw-bold">03</h2>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card border-0 shadow-sm p-4 text-center">
-                        <small class="text-muted fw-bold">PEÇAS EM FALTA</small>
-                        <h2 class="text-danger fw-bold">02</h2>
+                        <small class="text-muted fw-bold">RECEITA PREVISTA</small>
+                        <h2 class="text-success fw-bold">R$ 2.540,00</h2>
                     </div>
                 </div>
             </div>
@@ -101,22 +100,40 @@
         </div>
 
         <div id="clientes" class="page-section">
+            <h3 class="fw-bold mb-4">Clientes</h3>
+            <div class="card border-0 shadow-sm">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr><th>Nome</th><th>Veículo/Placa</th><th>WhatsApp</th></tr>
+                        </thead>
+                        <tbody id="corpoClientes"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="servicos" class="page-section">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h3 class="fw-bold">Clientes</h3>
-                <button class="btn btn-primary btn-sm">+ Novo</button>
+                <h3 class="fw-bold">Ordens de Serviço</h3>
+                <button class="btn btn-primary btn-sm">+ Abrir O.S.</button>
             </div>
             <div class="card border-0 shadow-sm">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>Nome</th>
-                                <th>Veículo/Placa</th>
-                                <th>WhatsApp</th>
-                                <th>Ações</th>
+                                <th>Nº OS</th>
+                                <th>Cliente</th>
+                                <th>Veículo</th>
+                                <th>Serviço</th>
+                                <th>Status</th>
+                                <th>Valor</th>
+                                <th>Ação</th>
                             </tr>
                         </thead>
-                        <tbody id="corpoClientes"></tbody>
+                        <tbody id="corpoOS">
+                            </tbody>
                     </table>
                 </div>
             </div>
@@ -125,59 +142,56 @@
     </div>
 
     <script>
-        const pecas = [
-            { nome: 'Óleo 5W30', qtd: 45, min: 10 },
-            { nome: 'Filtro Óleo', qtd: 3, min: 5 }
-        ];
-
+        // Dados Fixos para Demonstração
+        const pecas = [{ nome: 'Óleo 5W30', qtd: 45, min: 10 }, { nome: 'Filtro Óleo', qtd: 3, min: 5 }];
+        
         const listaClientes = [
             { nome: 'Márcio Rodrigues', carro: 'Hilux SW4', placa: 'ABC-1234', tel: '62999990000' },
-            { nome: 'Felipe Oliveira', carro: 'Corolla', placa: 'XYZ-5678', tel: '62988881111' },
-            { nome: 'Ana Beatriz', carro: 'Compass', placa: 'JJJ-0099', tel: '62977772222' }
+            { nome: 'Felipe Oliveira', carro: 'Corolla', placa: 'XYZ-5678', tel: '62988881111' }
+        ];
+
+        const listaOS = [
+            { id: '1050', cliente: 'Márcio Rodrigues', veiculo: 'Hilux', servico: 'Revisão 60k', status: 'Manutenção', valor: '850,00', cor: 'warning' },
+            { id: '1051', cliente: 'Felipe Oliveira', veiculo: 'Corolla', servico: 'Troca de Pastilhas', status: 'Pronto', valor: '320,00', cor: 'success' },
+            { id: '1052', cliente: 'Ana Beatriz', veiculo: 'Compass', servico: 'Injeção Eletrônica', status: 'Aguardando Peça', valor: '1.370,00', cor: 'info' }
         ];
 
         function atualizarDados() {
             // Preenche Estoque
             document.getElementById('corpoEstoque').innerHTML = pecas.map(p => `
-                <tr>
-                    <td>${p.nome}</td>
-                    <td class="${p.qtd <= p.min ? 'stock-low' : ''}">${p.qtd} un</td>
-                    <td><span class="badge ${p.qtd <= p.min ? 'bg-danger' : 'bg-success'}">${p.qtd <= p.min ? 'REPOR' : 'OK'}</span></td>
-                </tr>
+                <tr><td>${p.nome}</td><td>${p.qtd} un</td><td><span class="badge ${p.qtd <= p.min ? 'bg-danger' : 'bg-success'}">OK</span></td></tr>
             `).join('');
 
             // Preenche Clientes
             document.getElementById('corpoClientes').innerHTML = listaClientes.map(c => `
+                <tr><td class="fw-bold">${c.nome}</td><td>${c.carro} <span class="placa-badge">${c.placa}</span></td><td>${c.tel}</td></tr>
+            `).join('');
+
+            // Preenche O.S.
+            document.getElementById('corpoOS').innerHTML = listaOS.map(os => `
                 <tr>
-                    <td class="fw-bold">${c.nome}</td>
-                    <td>${c.carro} <span class="placa-badge">${c.placa}</span></td>
-                    <td>${c.tel}</td>
-                    <td>
-                        <a href="https://wa.me/55${c.tel}" target="_blank" class="btn btn-success btn-sm"><i class="fab fa-whatsapp"></i></a>
-                    </td>
+                    <td class="fw-bold text-primary">#${os.id}</td>
+                    <td>${os.cliente}</td>
+                    <td>${os.veiculo}</td>
+                    <td>${os.servico}</td>
+                    <td><span class="badge bg-${os.cor}">${os.status}</span></td>
+                    <td class="fw-bold">R$ ${os.valor}</td>
+                    <td><button class="btn btn-sm btn-light border"><i class="fas fa-print"></i></button></td>
                 </tr>
             `).join('');
         }
 
         function showSection(id) {
-            // Esconde todas as seções
             document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
-            // Remove active de todos os links
             document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
-            
-            // Ativa a seção e o link
             document.getElementById(id).classList.add('active');
             const link = document.getElementById('link-' + id);
             if(link) link.classList.add('active');
-
             if(window.innerWidth < 768) toggleSidebar();
         }
 
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('active');
-        }
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
 
-        // Rodar ao abrir a página
         atualizarDados();
     </script>
 </body>
