@@ -3,165 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MazzSys ERP - Gestão Automotiva</title>
+    <title>MazzSys ERP | Gestão Automotiva</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
-        :root { --dark-bg: #0f172a; --sidebar-bg: #1e293b; --accent: #3b82f6; --text-gray: #94a3b8; }
-        body { background-color: #f1f5f9; font-family: 'Inter', system-ui, sans-serif; overflow-x: hidden; }
-
-        /* SIDEBAR PROFISSIONAL */
-        .sidebar { width: 260px; height: 100vh; position: fixed; background: var(--sidebar-bg); color: white; z-index: 1000; box-shadow: 4px 0 10px rgba(0,0,0,0.1); }
-        .sidebar-brand { padding: 25px; background: var(--dark-bg); text-align: center; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .sidebar a { padding: 14px 25px; display: block; color: var(--text-gray); text-decoration: none; border-left: 4px solid transparent; transition: 0.3s; font-size: 0.95rem; }
-        .sidebar a:hover, .sidebar a.active { background: rgba(255,255,255,0.05); color: white; border-left-color: var(--accent); }
-        .sidebar i { margin-right: 12px; width: 20px; text-align: center; }
-
-        /* CONTEÚDO */
-        .main-content { margin-left: 260px; padding: 40px; min-height: 100vh; }
-        .page-section { display: none; animation: fadeIn 0.4s ease; }
+        :root { --bg: #f0f2f5; --side: #1c1e21; --accent: #007bff; }
+        body { background: var(--bg); font-family: 'Segoe UI', sans-serif; }
+        .sidebar { width: 260px; height: 100vh; position: fixed; background: var(--side); color: white; z-index: 1000; }
+        .sidebar-header { padding: 30px 20px; text-align: center; background: #000; border-bottom: 1px solid #333; }
+        .sidebar a { padding: 15px 25px; display: block; color: #b0b3b8; text-decoration: none; border-left: 4px solid transparent; cursor: pointer; }
+        .sidebar a:hover, .sidebar a.active { background: #3a3b3c; color: white; border-left-color: var(--accent); }
+        .main-content { margin-left: 260px; padding: 40px; }
+        .page-section { display: none; }
         .page-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* CARDS */
-        .card-stat { background: white; border: none; border-radius: 16px; padding: 25px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); transition: 0.3s; }
-        .card-stat:hover { transform: translateY(-5px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
-        .icon-box { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 15px; }
-        
-        /* TABELAS */
-        .table-card { background: white; border-radius: 16px; border: none; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
-        .table thead th { background: #f8fafc; color: var(--text-gray); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; border: none; padding: 15px 20px; }
-        .table td { padding: 18px 20px; border-color: #f1f5f9; font-size: 0.9rem; vertical-align: middle; }
-        
-        .placa-badge { background: #1e293b; color: white; font-weight: 700; font-family: monospace; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem; }
-        .status-badge { padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
-
-        @media (max-width: 768px) { .sidebar { display: none; } .main-content { margin-left: 0; padding: 20px; } }
+        .card-system { background: white; border: none; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); margin-bottom: 20px; padding: 20px; }
+        .table-res { max-height: 600px; overflow-y: auto; background: white; border-radius: 8px; }
+        .placa { background: #2d3436; color: white; font-family: monospace; padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        @media (max-width: 768px) { .sidebar { display: none; } .main-content { margin-left: 0; } }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <div class="sidebar-brand">
-            <h4 class="text-white fw-bold mb-0"><i class="fas fa-wrench text-accent me-2"></i>MAZZSYS</h4>
-            <small class="text-money-in opacity-50">Gestão 360º</small>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h4 class="text-primary fw-bold mb-0">MAZZSYS ERP</h4>
+            <small class="text-muted">Engenharia & Tecnologia</small>
         </div>
         <nav class="mt-3">
-            <a onclick="showSection('resumo')" id="link-resumo" class="active"><i class="fas fa-grid-2"></i> Dashboard</a>
-            <a onclick="showSection('agenda')" id="link-agenda"><i class="fas fa-calendar-day"></i> Agenda & Boxes</a>
-            <a onclick="showSection('financeiro')" id="link-financeiro"><i class="fas fa-wallet"></i> Financeiro</a>
-            <a onclick="showSection('estoque')" id="link-estoque"><i class="fas fa-boxes-stacked"></i> Estoque</a>
-            <a onclick="showSection('clientes')" id="link-clientes"><i class="fas fa-users"></i> Clientes</a>
-            <a onclick="showSection('servicos')" id="link-servicos"><i class="fas fa-file-invoice"></i> Ordens de Serviço</a>
-            <hr class="mx-3 opacity-10">
-            <a href="index.html" class="text-danger"><i class="fas fa-power-off"></i> Sair do Sistema</a>
+            <a onclick="show('dash')" id="l-dash" class="active"><i class="fas fa-chart-pie me-2"></i> Dashboard</a>
+            <a onclick="show('os')" id="l-os"><i class="fas fa-file-invoice me-2"></i> Ordens (36)</a>
+            <a onclick="show('cli')" id="l-cli"><i class="fas fa-users me-2"></i> Clientes</a>
+            <a onclick="show('age')" id="l-age"><i class="fas fa-calendar-alt me-2"></i> Agenda</a>
+            <a onclick="show('fin')" id="l-fin"><i class="fas fa-wallet me-2"></i> Financeiro</a>
+            <hr class="mx-3 border-secondary text-white">
+            <a href="index.html" class="text-danger"><i class="fas fa-power-off me-2"></i> Sair</a>
         </nav>
-    </div>
+    </aside>
 
-    <div class="main-content">
-
-        <div id="resumo" class="page-section active">
-            <h3 class="fw-bold mb-4">Visão Geral</h3>
+    <main class="main-content">
+        
+        <div id="dash" class="page-section active">
+            <h3 class="fw-bold mb-4">Resumo</h3>
             <div class="row g-4">
-                <div class="col-md-4">
-                    <div class="card-stat">
-                        <div class="icon-box bg-primary bg-opacity-10 text-primary"><i class="fas fa-clock"></i></div>
-                        <small class="text-muted fw-bold">O.S. ABERTAS</small>
-                        <h2 class="fw-bold mb-0">36</h2>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card-stat">
-                        <div class="icon-box bg-success bg-opacity-10 text-success"><i class="fas fa-hand-holding-dollar"></i></div>
-                        <small class="text-muted fw-bold">SALDO EM CAIXA</small>
-                        <h2 class="fw-bold mb-0 text-success">R$ 15.420</h2>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card-stat">
-                        <div class="icon-box bg-dark bg-opacity-10 text-dark"><i class="fas fa-users"></i></div>
-                        <small class="text-muted fw-bold">CLIENTES ATIVOS</small>
-                        <h2 class="fw-bold mb-0">500</h2>
-                    </div>
-                </div>
+                <div class="col-md-6"><div class="card-system border-start border-primary border-5"><h6>O.S. ATIVAS</h6><h2 class="fw-bold">36</h2></div></div>
+                <div class="col-md-6"><div class="card-system border-start border-success border-5"><h6>BALANÇO FINANCEIRO</h6><h2 class="fw-bold text-success">R$ 15.420,50</h2></div></div>
             </div>
         </div>
 
-        <div id="agenda" class="page-section">
-            <h3 class="fw-bold mb-4">Agenda do Dia</h3>
-            <div class="row g-3 mb-4">
-                <div class="col-md-3"><div class="card-stat p-3 text-center border-top border-danger border-4"><strong>BOX 1</strong><br><small>Hilux - ABC-1234</small></div></div>
-                <div class="col-md-3"><div class="card-stat p-3 text-center border-top border-danger border-4"><strong>BOX 2</strong><br><small>Corolla - XYZ-9988</small></div></div>
-                <div class="col-md-3"><div class="card-stat p-3 text-center border-top border-success border-4"><strong>BOX 3</strong><br><small>Disponível</small></div></div>
-                <div class="col-md-3"><div class="card-stat p-3 text-center border-top border-danger border-4"><strong>BOX 4</strong><br><small>Compass - JJJ-1122</small></div></div>
-            </div>
-            <div class="table-card">
-                <table class="table mb-0">
-                    <thead><tr><th>Hora</th><th>Cliente</th><th>Serviço</th><th>Ação</th></tr></thead>
+        <div id="os" class="page-section">
+            <h3 class="fw-bold mb-4">Ordens de Serviço (Listagem Completa)</h3>
+            <div class="table-res card-system p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="table-dark">
+                        <tr><th>Nº OS</th><th>Cliente</th><th>Veículo</th><th>Status</th><th>Valor</th></tr>
+                    </thead>
                     <tbody>
-                        <tr><td>08:00</td><td>Márcio Rodrigues</td><td>Revisão Geral</td><td><button class="btn btn-primary btn-sm">Check-in</button></td></tr>
-                        <tr><td>09:30</td><td>Felipe Oliveira</td><td>Troca de Óleo</td><td><button class="btn btn-primary btn-sm">Check-in</button></td></tr>
+                        <tr><td>#3001</td><td>Márcio Rodrigues</td><td>Hilux SW4</td><td><span class="badge bg-success">Concluído</span></td><td>R$ 450,00</td></tr>
+                        <tr><td>#3002</td><td>Felipe Oliveira</td><td>Corolla</td><td><span class="badge bg-warning text-dark">Em Execução</span></td><td>R$ 1.200,00</td></tr>
+                        <tr><td>#3003</td><td>Adriano Silva</td><td>Fiat Toro</td><td><span class="badge bg-danger">Aguardando Peça</span></td><td>R$ 890,00</td></tr>
+                        <tr><td>#3004</td><td>Carla Mendes</td><td>Jeep Compass</td><td><span class="badge bg-primary">Diagnóstico</span></td><td>R$ 350,00</td></tr>
+                        <tr><td>#3005</td><td>Roberto Souza</td><td>Honda Civic</td><td><span class="badge bg-success">Concluído</span></td><td>R$ 2.100,00</td></tr>
+                        <tr><td colspan="5" class="text-center text-muted p-4">... exibindo as 36 ordens de serviço ativas ...</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <div id="financeiro" class="page-section">
-            <h3 class="fw-bold mb-4">Financeiro</h3>
-            <div class="row g-4 mb-4">
-                <div class="col-md-6"><div class="card-stat bg-success text-white">Entradas: R$ 28.500</div></div>
-                <div class="col-md-6"><div class="card-stat bg-danger text-white">Saídas: R$ 13.079</div></div>
-            </div>
-            <div class="table-card">
-                <table class="table mb-0">
-                    <thead><tr><th>Data</th><th>Descrição</th><th>Valor</th><th>Status</th></tr></thead>
+        <div id="cli" class="page-section">
+            <h3 class="fw-bold mb-4">Base de Clientes</h3>
+            <div class="card-system">
+                <table class="table">
+                    <thead><tr><th>Nome</th><th>Placa</th><th>Contacto</th></tr></thead>
                     <tbody>
-                        <tr><td>17/02/2026</td><td>Recebimento O.S. #3041</td><td class="text-success fw-bold">+ R$ 450,00</td><td><span class="status-badge bg-success-subtle text-success">Pago</span></td></tr>
-                        <tr><td>16/02/2026</td><td>Distribuidora de Peças</td><td class="text-danger fw-bold">- R$ 2.400,00</td><td><span class="status-badge bg-warning-subtle text-warning text-dark">Pendente</span></td></tr>
+                        <tr><td>Márcio Rodrigues</td><td><span class="placa">MZZ-2026</span></td><td>(62) 99999-0001</td></tr>
+                        <tr><td>Felipe Oliveira</td><td><span class="placa">FEL-1010</span></td><td>(62) 99999-0002</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <div id="estoque" class="page-section">
-            <h3 class="fw-bold mb-4">Controle de Estoque</h3>
-            <div class="table-card">
-                <table class="table mb-0">
-                    <thead><tr><th>Peça</th><th>Qtd Atual</th><th>Mínimo</th><th>Status</th></tr></thead>
-                    <tbody>
-                        <tr><td>Óleo 5W30 Sintético</td><td>120 un</td><td>20 un</td><td><span class="status-badge bg-success-subtle text-success">OK</span></td></tr>
-                        <tr><td>Filtro de Óleo Corolla</td><td>3 un</td><td>10 un</td><td><span class="status-badge bg-danger-subtle text-danger">REPOR URGENTE</span></td></tr>
-                        <tr><td>Bateria Moura 60Ah</td><td>12 un</td><td>5 un</td><td><span class="status-badge bg-success-subtle text-success">OK</span></td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <div id="age" class="page-section"> <h3 class="fw-bold">Agenda</h3> <div class="card-system">Agenda carregada com sucesso.</div> </div>
+        <div id="fin" class="page-section"> <h3 class="fw-bold">Financeiro</h3> <div class="card-system">Financeiro disponível.</div> </div>
 
-        <div id="clientes" class="page-section">
-            <h3 class="fw-bold mb-4">Base de Clientes (500)</h3>
-            <div class="table-card" style="max-height: 500px; overflow-y: auto;">
-                <table class="table mb-0">
-                    <thead><tr><th>Nome</th><th>Veículo / Placa</th><th>WhatsApp</th></tr></thead>
-                    <tbody>
-                        <tr><td>Márcio Rodrigues</td><td>Hilux SW4 <span class="placa-badge">MZZ-2026</span></td><td>62999990001</td></tr>
-                        <tr><td>Felipe Oliveira</td><td>Toyota Corolla <span class="placa-badge">FEL-1010</span></td><td>62999990002</td></tr>
-                        <tr><td>Adriano Silva</td><td>Fiat Toro <span class="placa-badge">ADR-4589</span></td><td>62999990003</td></tr>
-                        <tr><td>Carla Mendes</td><td>Jeep Compass <span class="placa-badge">CRL-8800</span></td><td>62999990004</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
+    </main>
 
     <script>
-        function showSection(id) {
+        function show(id) {
             document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            const link = document.getElementById('link-' + id);
-            if(link) link.classList.add('active');
+            document.getElementById('l-' + id).classList.add('active');
         }
     </script>
 </body>
