@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MazzSys ERP - Financeiro & Gestão</title>
+    <title>MazzSys ERP - Agenda & Boxes</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -16,10 +16,13 @@
         .main-content { margin-left: 260px; padding: 30px; }
         .page-section { display: none; }
         .page-section.active { display: block; }
-        .placa-badge { background: #e9ecef; color: #495057; font-weight: 700; font-family: monospace; padding: 2px 6px; border-radius: 4px; border: 1px solid #ced4da; }
-        .table-container { background: white; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); padding: 15px; }
-        .text-money-in { color: #198754; font-weight: bold; }
-        .text-money-out { color: #dc3545; font-weight: bold; }
+        
+        /* Estilos da Agenda */
+        .box-card { border: none; border-radius: 12px; transition: 0.3s; }
+        .box-occupied { border-top: 5px solid #dc3545; background: #fff; }
+        .box-free { border-top: 5px solid #198754; background: #fff; opacity: 0.8; }
+        .time-badge { background: #e9ecef; color: #495057; font-weight: bold; padding: 2px 8px; border-radius: 4px; }
+        
         @media (max-width: 768px) { .sidebar { display: none; } .main-content { margin-left: 0; } }
     </style>
 </head>
@@ -28,14 +31,15 @@
     <div class="sidebar">
         <div class="sidebar-brand">
             <h4 class="text-primary fw-bold mb-0">MAZZSYS</h4>
-            <small class="text-muted">Mecânica & Engenharia</small>
+            <small class="text-muted">Gestão Automotiva</small>
         </div>
         <nav class="mt-3">
             <a onclick="showSection('resumo')" id="link-resumo" class="active"><i class="fas fa-home me-2"></i> Dashboard</a>
+            <a onclick="showSection('agenda')" id="link-agenda"><i class="fas fa-calendar-alt me-2"></i> Agenda & Boxes</a>
             <a onclick="showSection('financeiro')" id="link-financeiro"><i class="fas fa-wallet me-2"></i> Financeiro</a>
             <a onclick="showSection('estoque')" id="link-estoque"><i class="fas fa-box me-2"></i> Estoque</a>
             <a onclick="showSection('clientes')" id="link-clientes"><i class="fas fa-users me-2"></i> Clientes</a>
-            <a onclick="showSection('servicos')" id="link-servicos"><i class="fas fa-clipboard-list me-2"></i> Ordens de Serviço</a>
+            <a onclick="showSection('servicos')" id="link-servicos"><i class="fas fa-clipboard-list me-2"></i> O.S.</a>
             <hr class="mx-3 border-secondary">
             <a href="index.html" class="text-danger"><i class="fas fa-sign-out-alt me-2"></i> Sair</a>
         </nav>
@@ -43,89 +47,93 @@
 
     <div class="main-content">
         <div id="resumo" class="page-section active">
-            <h3 class="fw-bold mb-4">Painel de Controle</h3>
+            <h3 class="fw-bold mb-4">Painel Principal</h3>
             <div class="row g-4 text-center">
                 <div class="col-md-4">
+                    <div class="card border-0 shadow-sm p-4 border-start border-danger border-5">
+                        <small class="text-muted fw-bold">BOXES OCUPADOS</small>
+                        <h2 class="text-danger fw-bold">03 / 04</h2>
+                    </div>
+                </div>
+                <div class="col-md-4">
                     <div class="card border-0 shadow-sm p-4 border-start border-primary border-5">
-                        <small class="text-muted fw-bold">O.S. ABERTAS</small>
-                        <h2 class="text-primary fw-bold">36</h2>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card border-0 shadow-sm p-4 border-start border-success border-5">
-                        <small class="text-muted fw-bold">SALDO EM CAIXA</small>
-                        <h2 class="text-success fw-bold">R$ 15.420,50</h2>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card border-0 shadow-sm p-4 border-start border-dark border-5">
-                        <small class="text-muted fw-bold">CLIENTES</small>
-                        <h2 class="text-dark fw-bold">500</h2>
+                        <small class="text-muted fw-bold">AGENDADOS HOJE</small>
+                        <h2 class="text-primary fw-bold">12</h2>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="financeiro" class="page-section">
-            <h3 class="fw-bold mb-4">Fluxo de Caixa</h3>
-            <div class="row g-3 mb-4 text-center">
-                <div class="col-md-6"><div class="card bg-success text-white p-3">Entradas (Mês): R$ 28.500</div></div>
-                <div class="col-md-6"><div class="card bg-danger text-white p-3">Saídas (Mês): R$ 13.079</div></div>
+        <div id="agenda" class="page-section">
+            <h3 class="fw-bold mb-4">Agenda e Ocupação de Boxes</h3>
+            
+            <div class="row g-3 mb-5">
+                <div class="col-md-3">
+                    <div class="card box-card box-occupied shadow-sm p-3">
+                        <small class="text-muted fw-bold">BOX 01 (ELEVADOR)</small>
+                        <p class="mb-1 fw-bold">Hilux - ABC-1234</p>
+                        <span class="badge bg-danger w-50">Ocupado</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card box-card box-occupied shadow-sm p-3">
+                        <small class="text-muted fw-bold">BOX 02 (ELEVADOR)</small>
+                        <p class="mb-1 fw-bold">Corolla - XYZ-5678</p>
+                        <span class="badge bg-danger w-50">Ocupado</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card box-card box-free shadow-sm p-3 text-muted">
+                        <small class="fw-bold">BOX 03 (RAMPA)</small>
+                        <p class="mb-1 fw-bold">-- Disponível --</p>
+                        <span class="badge bg-success w-50">Livre</span>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card box-card box-occupied shadow-sm p-3">
+                        <small class="text-muted fw-bold">BOX 04 (ALINHAMENTO)</small>
+                        <p class="mb-1 fw-bold">Jeep Compass</p>
+                        <span class="badge bg-danger w-50">Ocupado</span>
+                    </div>
+                </div>
             </div>
-            <div class="table-container">
-                <table class="table table-hover">
-                    <thead><tr><th>Data</th><th>Descrição</th><th>Valor</th><th>Status</th></tr></thead>
+
+            <h5 class="fw-bold mb-3"><i class="fas fa-clock text-primary me-2"></i>Agendamentos do Dia</h5>
+            <div class="bg-white rounded-3 shadow-sm p-3">
+                <table class="table table-hover align-middle">
+                    <thead><tr><th>Horário</th><th>Cliente</th><th>Veículo</th><th>Serviço</th><th>Ação</th></tr></thead>
                     <tbody>
-                        <tr><td>17/02/2026</td><td>Recebimento O.S. #3041</td><td class="text-money-in">+ R$ 450,00</td><td><span class="badge bg-success">Pago</span></td></tr>
-                        <tr><td>16/02/2026</td><td>Peças Distribuidora X</td><td class="text-money-out">- R$ 2.400,00</td><td><span class="badge bg-warning text-dark">Pendente</span></td></tr>
-                        <tr><td>15/02/2026</td><td>Aluguel Galpão</td><td class="text-money-out">- R$ 3.500,00</td><td><span class="badge bg-success">Pago</span></td></tr>
+                        <tr>
+                            <td><span class="time-badge">08:00</span></td>
+                            <td>Márcio Rodrigues</td>
+                            <td>Hilux SW4</td>
+                            <td>Troca de Óleo</td>
+                            <td><button class="btn btn-primary btn-sm rounded-pill px-3" onclick="confirm('Transformar em O.S.?')">Check-in</button></td>
+                        </tr>
+                        <tr>
+                            <td><span class="time-badge">09:30</span></td>
+                            <td>Felipe Oliveira</td>
+                            <td>Corolla</td>
+                            <td>Revisão 40k</td>
+                            <td><button class="btn btn-primary btn-sm rounded-pill px-3">Check-in</button></td>
+                        </tr>
+                        <tr>
+                            <td><span class="time-badge">14:00</span></td>
+                            <td>Adriano Silva</td>
+                            <td>Fiat Toro</td>
+                            <td>Freios</td>
+                            <td><button class="btn btn-outline-secondary btn-sm rounded-pill px-3">Aguardando</button></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <div id="estoque" class="page-section">
-            <h3 class="fw-bold mb-4">Estoque</h3>
-            <div class="table-container">
-                <table class="table table-hover">
-                    <thead><tr><th>Item</th><th>Qtd</th><th>Status</th></tr></thead>
-                    <tbody>
-                        <tr><td>Óleo 5W30 Sintético</td><td>120 un</td><td><span class="badge bg-success">OK</span></td></tr>
-                        <tr><td>Filtro Óleo Corolla</td><td>3 un</td><td><span class="badge bg-danger">REPOR</span></td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <div id="financeiro" class="page-section"> <h3 class="fw-bold mb-4">Financeiro</h3> <p>Carregando dados financeiros...</p> </div>
+        <div id="estoque" class="page-section"> <h3 class="fw-bold mb-4">Estoque</h3> <p>Carregando estoque...</p> </div>
+        <div id="clientes" class="page-section"> <h3 class="fw-bold mb-4">Clientes</h3> <p>Carregando 500 clientes...</p> </div>
+        <div id="servicos" class="page-section"> <h3 class="fw-bold mb-4">Ordens de Serviço</h3> <p>Carregando 36 O.S....</p> </div>
 
-        <div id="clientes" class="page-section">
-            <h3 class="fw-bold mb-4">Base de Clientes</h3>
-            <div class="table-container" style="max-height: 500px; overflow-y: auto;">
-                <table class="table table-hover">
-                    <thead><tr><th>Nome</th><th>Veículo/Placa</th></tr></thead>
-                    <tbody>
-                        <tr><td>Márcio Rodrigues</td><td>Hilux SW4 <span class="placa-badge">MZZ-2026</span></td></tr>
-                        <tr><td>Felipe Oliveira</td><td>Toyota Corolla <span class="placa-badge">FEL-1010</span></td></tr>
-                        <tr><td>Adriano Silva</td><td>Fiat Toro <span class="placa-badge">ADR-4589</span></td></tr>
-                        <tr><td>Carla Mendes</td><td>Jeep Compass <span class="placa-badge">CRL-8800</span></td></tr>
-                        <tr><td>Roberto Souza</td><td>Honda Civic <span class="placa-badge">RBT-0099</span></td></tr>
-                    </tbody>
-                </table>
-                <p class="text-center text-muted mt-3 small">Exibindo os primeiros 50 de 500 clientes...</p>
-            </div>
-        </div>
-
-        <div id="servicos" class="page-section">
-            <h3 class="fw-bold mb-4">Ordens de Serviço</h3>
-            <div class="table-container">
-                <table class="table table-hover">
-                    <thead><tr><th>Nº OS</th><th>Cliente</th><th>Status</th><th>Valor</th></tr></thead>
-                    <tbody>
-                        <tr><td>#3041</td><td>Márcio Rodrigues</td><td><span class="badge bg-success">Pronto</span></td><td>R$ 450,00</td></tr>
-                        <tr><td>#3042</td><td>Felipe Oliveira</td><td><span class="badge bg-warning">Em Serviço</span></td><td>R$ 890,00</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
     </div>
 
     <script>
@@ -133,7 +141,8 @@
             document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            document.getElementById('link-' + id).classList.add('active');
+            const link = document.getElementById('link-' + id);
+            if(link) link.classList.add('active');
         }
     </script>
 </body>
