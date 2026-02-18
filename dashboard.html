@@ -2,138 +2,120 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAZZSYS ERP - GESTÃO PRO</title>
+    <title>MAZZSYS ERP - VERSÃO FINAL</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root { --sidebar-w: 260px; --top-h: 70px; --bg: #f8fafc; --dark: #0f172a; --accent: #3b82f6; }
-        body { background: var(--bg); font-family: 'Inter', sans-serif; margin: 0; display: flex; }
+        body { background: #f4f7f6; display: flex; font-family: 'Segoe UI', sans-serif; margin: 0; }
+        
+        /* Menu Lateral */
+        .sidebar { width: 250px; height: 100vh; background: #1a1d21; color: white; position: fixed; padding: 20px; }
+        .sidebar h2 { color: #0d6efd; text-align: center; margin-bottom: 20px; font-weight: bold; }
+        
+        /* BOTÃO SAIR EM DESTAQUE NO TOPO */
+        .btn-sair { display: block; width: 100%; background: #dc3545; color: white; text-align: center; padding: 10px; border-radius: 5px; text-decoration: none; font-weight: bold; margin-bottom: 30px; }
+        .btn-sair:hover { background: #a71d2a; color: white; }
 
-        /* SIDEBAR INDUSTRIAL */
-        .sidebar { width: var(--sidebar-w); height: 100vh; background: var(--dark); color: white; position: fixed; padding: 0; z-index: 1000; display: flex; flex-direction: column; }
-        .sidebar-brand { height: var(--top-h); display: flex; align-items: center; justify-content: center; background: #000; border-bottom: 1px solid #1e293b; }
-        .nav-links { flex-grow: 1; padding: 20px; }
-        .sidebar button { width: 100%; padding: 12px 15px; margin-bottom: 8px; background: transparent; color: #94a3b8; border: none; cursor: pointer; text-align: left; border-radius: 8px; transition: 0.2s; font-weight: 500; }
-        .sidebar button:hover, .active-tab { background: var(--accent) !important; color: white !important; }
-        .sidebar i { width: 20px; margin-right: 10px; }
+        .sidebar button { width: 100%; background: #2c3136; border: none; color: #adb5bd; padding: 12px; text-align: left; cursor: pointer; border-radius: 5px; margin-bottom: 8px; }
+        .sidebar button:hover, .btn-ativa { background: #0d6efd !important; color: white !important; }
 
-        /* BOTÃO SAIR DESTAQUE */
-        .logout-area { padding: 20px; border-top: 1px solid #1e293b; background: #000; }
-        .btn-exit { background: #ef4444 !important; color: white !important; text-align: center !important; font-weight: bold !important; text-decoration: none; display: block; padding: 12px; border-radius: 8px; }
-        .btn-exit:hover { background: #dc2626 !important; }
-
-        /* CONTEÚDO PRINCIPAL */
-        .main { margin-left: var(--sidebar-w); padding: 40px; width: calc(100% - var(--sidebar-w)); }
+        /* Conteúdo */
+        .main { margin-left: 250px; padding: 40px; width: 100%; }
         .aba { display: none; }
-        .aba.active { display: block; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .aba.ativa { display: block; }
 
-        /* CARDS E TABELAS */
-        .card-stat { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); border: 1px solid #e2e8f0; }
-        .table-container { background: white; border-radius: 12px; padding: 0; box-shadow: 0 4px 6px rgba(0,0,0,0.02); overflow: hidden; border: 1px solid #e2e8f0; }
-        .table { margin-bottom: 0; }
-        .table thead { background: #f1f5f9; }
-        .table th { border: none; color: #64748b; font-size: 12px; text-transform: uppercase; padding: 15px; }
-        .placa { background: #1e293b; color: white; padding: 3px 6px; border-radius: 4px; font-family: monospace; font-size: 12px; }
+        .card-povoado { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        .placa { background: #333; color: white; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 13px; }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
-        <div class="sidebar-brand">
-            <h4 class="mb-0 text-primary fw-bold">MAZZSYS ERP</h4>
-        </div>
+        <h2>MAZZSYS</h2>
         
-        <div class="nav-links">
-            <button onclick="tab('dash')" id="b-dash" class="active-tab"><i class="fas fa-grid-2"></i> Dashboard</button>
-            <button onclick="tab('os')" id="b-os"><i class="fas fa-clipboard-list"></i> Ordens (36)</button>
-            <button onclick="tab('cli')" id="l-cli"><i class="fas fa-users"></i> Clientes (50)</button>
-            <button onclick="tab('est')" id="b-est"><i class="fas fa-boxes-stacked"></i> Estoque</button>
-            <button onclick="tab('fin')" id="b-fin"><i class="fas fa-wallet"></i> Financeiro</button>
-        </div>
+        <a href="index.html" class="btn-sair">SAIR DO SISTEMA</a>
 
-        <div class="logout-area">
-            <a href="index.html" class="btn-exit"><i class="fas fa-sign-out-alt me-2"></i> SAIR DO SISTEMA</a>
-        </div>
+        <button onclick="mudar('d')" id="b-d" class="btn-ativa">Dashboard</button>
+        <button onclick="mudar('o')" id="b-o">Ordens de Serviço (36)</button>
+        <button onclick="mudar('c')" id="b-c">Clientes (50)</button>
+        <button onclick="mudar('f')" id="b-f">Financeiro</button>
+        <button onclick="mudar('e')" id="b-e">Estoque</button>
     </div>
 
     <div class="main">
-        <div id="dash" class="aba active">
-            <h3 class="fw-bold mb-4 text-dark">Painel Executivo</h3>
-            <div class="row g-4">
-                <div class="col-md-4"><div class="card-stat"><h6>O.S. TOTAIS</h6><h3>36</h3></div></div>
-                <div class="col-md-4"><div class="card-stat"><h6>CLIENTES</h6><h3>50</h3></div></div>
-                <div class="col-md-4"><div class="card-stat"><h6 class="text-success">SALDO CAIXA</h6><h3 class="text-success">R$ 15.420</h3></div></div>
+        <div id="d" class="aba ativa">
+            <h3>Painel de Controle</h3>
+            <div class="row mt-4">
+                <div class="col-md-4"><div class="card-povoado text-center"><h6>OS ATIVAS</h6><h2>36</h2></div></div>
+                <div class="col-md-4"><div class="card-povoado text-center"><h6>CLIENTES</h6><h2>50</h2></div></div>
+                <div class="col-md-4"><div class="card-povoado text-center text-success"><h6>SALDO</h6><h2>R$ 15.420</h2></div></div>
             </div>
         </div>
 
-        <div id="os" class="aba">
-            <h3 class="fw-bold mb-4">Ordens de Serviço (36)</h3>
-            <div class="table-container">
-                <table class="table table-hover">
-                    <thead><tr><th>ID</th><th>Cliente</th><th>Veículo</th><th>Status</th><th>Valor</th></tr></thead>
+        <div id="o" class="aba">
+            <h3>Ordens de Serviço (36 Registros)</h3>
+            <div class="card-povoado p-0 overflow-hidden">
+                <table class="table table-striped mb-0">
+                    <thead class="table-dark"><tr><th>OS</th><th>Cliente</th><th>Veículo</th><th>Valor</th></tr></thead>
                     <tbody id="corpoOS"></tbody>
                 </table>
             </div>
         </div>
 
-        <div id="cli" class="aba">
-            <h3 class="fw-bold mb-4">Base de Clientes (50)</h3>
-            <div class="table-container" style="max-height: 500px; overflow-y: auto;">
-                <table class="table table-hover">
-                    <thead><tr><th>ID</th><th>Nome</th><th>Veículo / Placa</th></tr></thead>
-                    <tbody id="corpoCli"></tbody>
+        <div id="c" class="aba">
+            <h3>Base de Clientes (50 Registros)</h3>
+            <div class="card-povoado p-0 overflow-hidden" style="max-height: 500px; overflow-y: auto;">
+                <table class="table table-hover mb-0">
+                    <thead class="table-dark"><tr><th>Nome</th><th>Veículo</th><th>Placa</th></tr></thead>
+                    <tbody id="corpoCLI"></tbody>
                 </table>
             </div>
         </div>
 
-        <div id="est" class="aba">
-            <h3 class="fw-bold mb-4">Estoque</h3>
-            <div class="table-container">
-                <table class="table table-hover">
-                    <thead><tr><th>Item</th><th>Qtd</th><th>Status</th></tr></thead>
+        <div id="f" class="aba">
+            <h3>Financeiro</h3>
+            <div class="card-povoado">
+                <h4 style="color:green">Receita: R$ 28.500,00</h4>
+                <h4 style="color:red">Despesas: R$ 13.079,50</h4>
+            </div>
+        </div>
+
+        <div id="e" class="aba">
+            <h3>Estoque</h3>
+            <div class="card-povoado">
+                <table class="table">
+                    <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
                     <tbody>
-                        <tr><td>Óleo 5W30</td><td>120 un</td><td><span class="badge bg-success">OK</span></td></tr>
-                        <tr><td>Filtro Óleo</td><td>5 un</td><td><span class="badge bg-danger">REPOR</span></td></tr>
-                        <tr><td>Pastilha Freio</td><td>25 un</td><td><span class="badge bg-success">OK</span></td></tr>
+                        <tr><td>Óleo 5W30</td><td>120 un</td></tr>
+                        <tr><td>Filtro Óleo</td><td>5 un</td></tr>
                     </tbody>
                 </table>
-            </div>
-        </div>
-
-        <div id="fin" class="aba">
-            <h3 class="fw-bold mb-4 text-dark">Financeiro</h3>
-            <div class="card-stat p-4 border-primary border-start border-5">
-                <h4 class="text-success mb-0">Disponível: R$ 15.420,50</h4>
             </div>
         </div>
     </div>
 
     <script>
-        function tab(id) {
-            document.querySelectorAll('.aba').forEach(a => a.classList.remove('active'));
-            document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('active-tab'));
-            document.getElementById(id).classList.add('active');
-            if(document.getElementById('b-'+id)) document.getElementById('b-'+id).classList.add('active-tab');
+        function mudar(id) {
+            document.querySelectorAll('.aba').forEach(a => a.classList.remove('ativa'));
+            document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('btn-ativa'));
+            document.getElementById(id).classList.add('ativa');
+            document.getElementById('b-' + id).classList.add('btn-ativa');
         }
 
         window.onload = function() {
-            // Povoar 36 O.S.
+            // Povoar OS (36)
             let hOS = "";
             for(let i=1; i<=36; i++) {
-                hOS += `<tr><td>#30${i}</td><td>Cliente Demo ${i}</td><td>Veículo ${i}</td><td><span class="badge bg-light text-dark">Em Serviço</span></td><td>R$ 450,00</td></tr>`;
+                hOS += `<tr><td>#30${i}</td><td>Cliente ${i}</td><td>Veículo Mod ${i}</td><td>R$ 450,00</td></tr>`;
             }
             document.getElementById('corpoOS').innerHTML = hOS;
 
-            // Povoar 50 Clientes
-            let hCli = "";
-            const nomes = ["Márcio", "Felipe", "Adriano", "Carla", "Roberto", "Ana", "Ricardo", "Juliana", "Marcos", "Patrícia"];
-            const carros = ["Hilux", "Corolla", "Toro", "Compass", "Civic", "Golf", "S10", "Onix", "Ranger", "HB20"];
+            // Povoar Clientes (50)
+            let hCLI = "";
+            const n = ["Márcio", "Felipe", "Adriano", "Carla", "Roberto"];
             for(let i=1; i<=50; i++) {
-                hCli += `<tr><td>#10${i}</td><td>${nomes[i%10]} ${i}</td><td>${carros[i%10]} <span class="placa">MZZ-${1000+i}</span></td></tr>`;
+                hCLI += `<tr><td>${n[i%5]} ${i}</td><td>Carro ${i}</td><td><span class="placa">MZZ-${1000+i}</span></td></tr>`;
             }
-            document.getElementById('corpoCli').innerHTML = hCli;
+            document.getElementById('corpoCLI').innerHTML = hCLI;
         }
     </script>
 </body>
