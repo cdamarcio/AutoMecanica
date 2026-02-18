@@ -2,156 +2,169 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>MAZZSYS ERP - GESTÃO COMPLETA</title>
+    <title>MAZZSYS ERP - DASHBOARD PRO</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        * { box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; background: #f4f7f6; color: #333; }
+        :root { --dark: #1e293b; --accent: #3b82f6; --success: #10b981; --warning: #f59e0b; }
+        body { font-family: 'Inter', sans-serif; background: #f8fafc; margin: 0; display: flex; }
         
-        /* Menu Lateral Estilizado */
-        .sidebar { width: 260px; height: 100vh; background: #1a1d21; color: white; position: fixed; padding: 20px; }
-        .sidebar h2 { color: #0d6efd; text-align: center; margin-bottom: 30px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .sidebar button { width: 100%; padding: 12px; margin-bottom: 8px; background: #2c3136; color: #adb5bd; border: none; cursor: pointer; text-align: left; border-radius: 6px; transition: 0.3s; }
-        .sidebar button:hover { background: #3e444a; color: white; }
-        .btn-ativa { background: #0d6efd !important; color: white !important; }
+        /* Sidebar Moderna */
+        .sidebar { width: 280px; height: 100vh; background: var(--dark); color: white; position: fixed; padding: 25px; box-shadow: 4px 0 10px rgba(0,0,0,0.1); }
+        .sidebar h2 { font-weight: 800; letter-spacing: -1px; margin-bottom: 40px; color: var(--accent); display: flex; align-items: center; gap: 10px; }
+        .sidebar button { width: 100%; padding: 14px; margin-bottom: 10px; background: rgba(255,255,255,0.05); color: #94a3b8; border: none; cursor: pointer; text-align: left; border-radius: 12px; transition: 0.3s; font-weight: 500; }
+        .sidebar button:hover, .btn-active { background: var(--accent) !important; color: white !important; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4); }
 
-        /* Área de Conteúdo */
-        .content { margin-left: 260px; padding: 40px; width: calc(100% - 260px); }
-        .aba { display: none; }
-        .aba.ativa { display: block; }
+        /* Conteúdo */
+        .content { margin-left: 280px; padding: 40px; width: calc(100% - 280px); }
+        .aba { display: none; animation: fadeIn 0.4s ease-out; }
+        .aba.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* Cards e Tabelas */
-        .card-topo { display: flex; gap: 20px; margin-bottom: 30px; }
-        .box { flex: 1; background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); text-align: center; border-top: 4px solid #0d6efd; }
-        .tabela-area { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); max-height: 600px; overflow-y: auto; }
-        table { width: 100%; border-collapse: collapse; }
-        th, td { padding: 15px; border-bottom: 1px solid #eee; text-align: left; }
-        th { background: #f8f9fa; position: sticky; top: 0; font-size: 13px; color: #666; }
+        /* Cards Visuais */
+        .stat-card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); border: 1px solid #f1f5f9; position: relative; overflow: hidden; }
+        .stat-card h3 { font-size: 28px; font-weight: 700; margin: 10px 0; }
+        .stat-card i { position: absolute; right: 20px; top: 20px; font-size: 24px; opacity: 0.2; }
+        .card-blue { border-bottom: 5px solid var(--accent); }
+        .card-green { border-bottom: 5px solid var(--success); }
+        .card-orange { border-bottom: 5px solid var(--warning); }
+
+        /* Tabelas */
+        .table-area { background: white; border-radius: 20px; padding: 20px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); margin-top: 30px; }
+        .table thead th { background: #f8fafc; border: none; color: #64748b; font-size: 12px; text-transform: uppercase; padding: 15px; }
+        .table td { vertical-align: middle; padding: 15px; border-color: #f1f5f9; }
+        .placa { background: #1e293b; color: white; padding: 4px 8px; border-radius: 6px; font-family: 'Roboto Mono', monospace; font-weight: bold; font-size: 12px; }
         
-        /* Badges */
-        .badge { padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
-        .badge-sucesso { background: #d1e7dd; color: #0f5132; }
-        .badge-alerta { background: #fff3cd; color: #664d03; }
-        .badge-perigo { background: #f8d7da; color: #842029; }
-        .placa { background: #333; color: white; padding: 2px 6px; border-radius: 4px; font-family: monospace; }
+        .progress { height: 8px; border-radius: 10px; background: #f1f5f9; }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
-        <h2>MAZZSYS</h2>
-        <button onclick="ver('dash')" id="b-dash" class="btn-ativa">Dashboard</button>
-        <button onclick="ver('os')" id="b-os">Ordens de Serviço (36)</button>
-        <button onclick="ver('est')" id="b-est">Estoque</button>
-        <button onclick="ver('cli')" id="b-cli">Clientes (500)</button>
-        <button onclick="ver('fin')" id="b-fin">Financeiro</button>
-        <br><br>
-        <a href="index.html" style="color:#ff4d4d; text-decoration:none; font-size:14px; padding:10px;">SAIR DO SISTEMA</a>
+        <h2><i class="fas fa-microchip"></i> MAZZSYS</h2>
+        <button onclick="tab('dash')" id="t-dash" class="btn-active"><i class="fas fa-chart-line me-2"></i> Dashboard</button>
+        <button onclick="tab('os')" id="t-os"><i class="fas fa-file-invoice me-2"></i> Ordens (36)</button>
+        <button onclick="tab('est')" id="t-est"><i class="fas fa-boxes-stacked me-2"></i> Estoque</button>
+        <button onclick="tab('cli')" id="t-cli"><i class="fas fa-users me-2"></i> Clientes (500)</button>
+        <button onclick="tab('fin')" id="t-fin"><i class="fas fa-wallet me-2"></i> Financeiro</button>
     </div>
 
     <div class="content">
         
-        <div id="dash" class="aba ativa">
-            <h2 class="mb-4">Painel de Controle</h2>
-            <div class="card-topo">
-                <div class="box"><h6>OS ABERTAS</h6><h2 style="color:#0d6efd">36</h2></div>
-                <div class="box"><h6>CLIENTES</h6><h2 style="color:#333">500</h2></div>
-                <div class="box"><h6>SALDO ATUAL</h6><h2 style="color:#198754">R$ 15.420</h2></div>
+        <div id="dash" class="aba active">
+            <h2 class="fw-bold mb-4 text-dark">Painel de Gestão</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="stat-card card-blue">
+                        <i class="fas fa-tools"></i>
+                        <small class="text-muted fw-bold">O.S. EM ANDAMENTO</small>
+                        <h3>36</h3>
+                        <div class="progress mt-2"><div class="progress-bar bg-primary" style="width: 75%"></div></div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card card-green">
+                        <i class="fas fa-dollar-sign"></i>
+                        <small class="text-muted fw-bold">CAIXA DISPONÍVEL</small>
+                        <h3 class="text-success">R$ 15.420</h3>
+                        <small class="text-success"><i class="fas fa-caret-up"></i> +12% este mês</small>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card card-orange">
+                        <i class="fas fa-warehouse"></i>
+                        <small class="text-muted fw-bold">OCUPAÇÃO PÁTIO</small>
+                        <h3>85%</h3>
+                        <div class="progress mt-2"><div class="progress-bar bg-warning" style="width: 85%"></div></div>
+                    </div>
+                </div>
             </div>
-            <div class="box" style="text-align: left; border-top: 4px solid #198754;">
-                <h5>Status da Oficina</h5>
-                <p>Todos os sistemas operacionais. <strong>Pátio: 85% de ocupação.</strong></p>
+
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="table-area">
+                        <h5 class="fw-bold mb-3">Atividade Recente</h5>
+                        <p class="text-muted small">Monitoramento em tempo real de serviços e estoque.</p>
+                        <hr>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span><i class="fas fa-check-circle text-success me-2"></i> Sistema MazzSys Operacional</span>
+                            <span class="badge bg-light text-dark">Versão 2.0 Industrial</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
         <div id="os" class="aba">
-            <h2>Ordens de Serviço Ativas (36)</h2>
-            <div class="tabela-area">
-                <table>
+            <h2 class="fw-bold mb-4">Ordens de Serviço (36)</h2>
+            <div class="table-area">
+                <table class="table table-hover">
                     <thead><tr><th>Nº OS</th><th>Cliente</th><th>Veículo</th><th>Status</th><th>Valor</th></tr></thead>
                     <tbody>
-                        <tr><td>#3001</td><td>Márcio Rodrigues</td><td>Hilux SW4</td><td><span class="badge badge-sucesso">Finalizado</span></td><td>R$ 450,00</td></tr>
-                        <tr><td>#3002</td><td>Felipe Oliveira</td><td>Toyota Corolla</td><td><span class="badge badge-alerta">Execução</span></td><td>R$ 1.200,00</td></tr>
-                        <tr><td>#3003</td><td>Adriano Silva</td><td>Fiat Toro</td><td><span class="badge badge-perigo">Peças</span></td><td>R$ 890,00</td></tr>
-                        <tr><td>#3004</td><td>Carla Mendes</td><td>Jeep Compass</td><td><span class="badge badge-alerta">Diagnóstico</span></td><td>R$ 350,00</td></tr>
-                        <tr><td>#3005</td><td>Ricardo Santos</td><td>S10 High Country</td><td><span class="badge badge-sucesso">Finalizado</span></td><td>R$ 2.400,00</td></tr>
-                        <tr><td>#3006</td><td>Ana Paula</td><td>Onix Turbo</td><td><span class="badge badge-alerta">Mecânica</span></td><td>R$ 600,00</td></tr>
-                        <tr><td>#3007</td><td>Roberto Lima</td><td>Honda Civic</td><td><span class="badge badge-sucesso">Finalizado</span></td><td>R$ 980,00</td></tr>
-                        <tr><td>#3008</td><td>Juliana Costa</td><td>VW Golf GTI</td><td><span class="badge badge-perigo">Peças</span></td><td>R$ 3.500,00</td></tr>
-                        <tr><td>#3009</td><td>Marcos Pereira</td><td>Ford Ranger</td><td><span class="badge badge-alerta">Elétrica</span></td><td>R$ 750,00</td></tr>
-                        <tr><td>#3010</td><td>Patrícia Souza</td><td>Hyundai HB20</td><td><span class="badge badge-sucesso">Finalizado</span></td><td>R$ 420,00</td></tr>
-                        <tr><td colspan="5" style="text-align:center; color:#999; padding:20px;">Exibindo total de 36 ordens registradas...</td></tr>
+                        <tr><td>#3001</td><td>Márcio Rodrigues</td><td>Hilux SW4 <span class="placa">MZZ-2026</span></td><td><span class="badge bg-success">Finalizado</span></td><td>R$ 450,00</td></tr>
+                        <tr><td>#3002</td><td>Felipe Oliveira</td><td>Corolla <span class="placa">FEL-1010</span></td><td><span class="badge bg-warning">Execução</span></td><td>R$ 1.200,00</td></tr>
+                        <tr><td>#3003</td><td>Adriano Silva</td><td>Fiat Toro <span class="placa">ADR-4589</span></td><td><span class="badge bg-danger">Peças</span></td><td>R$ 890,00</td></tr>
+                        <tr><td colspan="5" class="text-center py-4 text-muted">... listagem de 36 registros ativos no sistema ...</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
         <div id="est" class="aba">
-            <h2>Estoque de Peças</h2>
-            <div class="tabela-area">
-                <table>
-                    <thead><tr><th>Peça</th><th>Categoria</th><th>Quantidade</th><th>Status</th></tr></thead>
+            <h2 class="fw-bold mb-4">Estoque de Peças</h2>
+            <div class="table-area">
+                <table class="table">
+                    <thead><tr><th>Peça</th><th>Quantidade</th><th>Nível</th><th>Ação</th></tr></thead>
                     <tbody>
-                        <tr><td>Óleo 5W30 Sintético</td><td>Lubrificantes</td><td>120 un</td><td><span class="badge badge-sucesso">OK</span></td></tr>
-                        <tr><td>Filtro Óleo Corolla</td><td>Filtros</td><td>3 un</td><td><span class="badge badge-perigo">REPOR</span></td></tr>
-                        <tr><td>Pastilha Freio Hilux</td><td>Freios</td><td>25 un</td><td><span class="badge badge-sucesso">OK</span></td></tr>
-                        <tr><td>Bateria Moura 60Ah</td><td>Elétrica</td><td>12 un</td><td><span class="badge badge-sucesso">OK</span></td></tr>
-                        <tr><td>Lâmpada H7 Philips</td><td>Elétrica</td><td>2 un</td><td><span class="badge badge-perigo">REPOR</span></td></tr>
+                        <tr><td>Óleo 5W30</td><td>120 un</td><td><div class="progress" style="width:100px"><div class="progress-bar bg-success" style="width:100%"></div></div></td><td><span class="badge bg-light text-dark">OK</span></td></tr>
+                        <tr><td>Filtro Corolla</td><td>3 un</td><td><div class="progress" style="width:100px"><div class="progress-bar bg-danger" style="width:20%"></div></div></td><td><span class="badge bg-danger">COMPRAR</span></td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
         <div id="cli" class="aba">
-            <h2>Base de Dados (500 Clientes)</h2>
-            <div class="tabela-area">
-                <table>
-                    <thead><tr><th>Nome</th><th>Veículo</th><th>Placa</th><th>WhatsApp</th></tr></thead>
+            <h2 class="fw-bold mb-4">Base de Clientes (500)</h2>
+            <div class="table-area" style="max-height: 500px; overflow-y: auto;">
+                <table class="table table-hover">
+                    <thead><tr><th>Nome</th><th>Veículo</th><th>Placa</th></tr></thead>
                     <tbody>
-                        <tr><td>Márcio Rodrigues</td><td>Hilux SW4</td><td><span class="placa">MZZ-2026</span></td><td>62 99999-0001</td></tr>
-                        <tr><td>Felipe Oliveira</td><td>Corolla</td><td><span class="placa">FEL-1010</span></td><td>62 99999-0002</td></tr>
-                        <tr><td>Adriano Silva</td><td>Fiat Toro</td><td><span class="placa">ADR-4589</span></td><td>62 99999-0003</td></tr>
-                        <tr><td>Carla Mendes</td><td>Compass</td><td><span class="placa">CRL-8800</span></td><td>62 99999-0004</td></tr>
-                        <tr><td>Ricardo Santos</td><td>Civic G10</td><td><span class="placa">RCS-0010</span></td><td>62 99999-0005</td></tr>
-                        <tr><td colspan="4" style="text-align:center; color:#999; padding:20px;">Banco de dados com 500 registros carregados...</td></tr>
+                        <tr><td>Márcio Rodrigues</td><td>Hilux SW4</td><td><span class="placa">MZZ-2026</span></td></tr>
+                        <tr><td>Felipe Oliveira</td><td>Toyota Corolla</td><td><span class="placa">FEL-1010</span></td></tr>
+                        <tr><td colspan="3" class="text-center text-muted">500 Registros Carregados</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
         <div id="fin" class="aba">
-            <h2>Financeiro - Fluxo de Caixa</h2>
-            <div class="card-topo">
-                <div class="box" style="border-top-color:#198754"><h6>RECEITA (MÊS)</h6><h2 style="color:#198754">R$ 28.500</h2></div>
-                <div class="box" style="border-top-color:#dc3545"><h6>DESPESAS (MÊS)</h6><h2 style="color:#dc3545">R$ 13.079</h2></div>
-            </div>
-            <div class="tabela-area">
-                <table>
-                    <thead><tr><th>Data</th><th>Descrição</th><th>Valor</th></tr></thead>
-                    <tbody>
-                        <tr><td>17/02/26</td><td>Recebimento O.S. #3001</td><td style="color:green">+ R$ 450,00</td></tr>
-                        <tr><td>16/02/26</td><td>Compra de Peças (Distribuidora X)</td><td style="color:red">- R$ 2.400,00</td></tr>
-                        <tr><td>15/02/26</td><td>Aluguel Galpão KM</td><td style="color:red">- R$ 3.500,00</td></tr>
-                    </tbody>
-                </table>
+            <h2 class="fw-bold mb-4">Financeiro Profissional</h2>
+            <div class="row g-4">
+                <div class="col-md-6">
+                    <div class="stat-card" style="background: linear-gradient(135deg, #10b981, #059669); color: white;">
+                        <small class="opacity-75 fw-bold">RECEITA MENSAL</small>
+                        <h3>R$ 28.500</h3>
+                        <i class="fas fa-arrow-up" style="opacity: 0.5;"></i>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="stat-card" style="background: linear-gradient(135deg, #ef4444, #dc2626); color: white;">
+                        <small class="opacity-75 fw-bold">DESPESAS TOTAIS</small>
+                        <h3>R$ 13.079</h3>
+                        <i class="fas fa-arrow-down" style="opacity: 0.5;"></i>
+                    </div>
+                </div>
             </div>
         </div>
 
     </div>
 
     <script>
-        function ver(id) {
-            // Esconde todas as abas
-            var abas = document.getElementsByClassName('aba');
-            for (var i = 0; i < abas.length; i++) {
-                abas[i].classList.remove('ativa');
-            }
-            // Remove cor dos botões
-            var btns = document.querySelectorAll('.sidebar button');
-            btns.forEach(b => b.classList.remove('btn-ativa'));
-            
-            // Mostra a aba e pinta o botão
-            document.getElementById(id).classList.add('ativa');
-            document.getElementById('b-' + id).classList.add('btn-ativa');
+        function tab(id) {
+            document.querySelectorAll('.aba').forEach(a => a.classList.remove('active'));
+            document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('btn-active'));
+            document.getElementById(id).classList.add('active');
+            document.getElementById('t-' + id).classList.add('btn-active');
         }
     </script>
 </body>
