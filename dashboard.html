@@ -8,10 +8,27 @@
     <style>
         :root { --dark: #1e293b; --accent: #3b82f6; --success: #10b981; }
         body { font-family: 'Inter', sans-serif; background: #f8fafc; margin: 0; display: flex; }
-        .sidebar { width: 280px; height: 100vh; background: var(--dark); color: white; position: fixed; padding: 25px; }
+        
+        /* Sidebar Fixa com Flexbox para empurrar o Sair para o fim */
+        .sidebar { 
+            width: 280px; height: 100vh; background: var(--dark); color: white; 
+            position: fixed; padding: 25px; display: flex; flex-direction: column;
+        }
         .sidebar h2 { color: var(--accent); font-weight: 800; margin-bottom: 30px; text-align: center; }
-        .sidebar button { width: 100%; padding: 12px; margin-bottom: 8px; background: rgba(255,255,255,0.05); color: #94a3b8; border: none; cursor: pointer; text-align: left; border-radius: 10px; transition: 0.3s; }
+        
+        .nav-links { flex-grow: 1; } /* Faz este bloco ocupar o espaço disponível */
+        
+        .sidebar button, .sidebar a.btn-sair { 
+            width: 100%; padding: 12px; margin-bottom: 8px; background: rgba(255,255,255,0.05); 
+            color: #94a3b8; border: none; cursor: pointer; text-align: left; 
+            border-radius: 10px; transition: 0.3s; text-decoration: none; display: block;
+        }
         .sidebar button:hover, .btn-active { background: var(--accent) !important; color: white !important; }
+        
+        /* Estilo específico para o botão Sair */
+        .sidebar a.btn-sair { background: rgba(239, 68, 68, 0.1); color: #ef4444; margin-top: auto; margin-bottom: 0; border: 1px solid rgba(239, 68, 68, 0.2); }
+        .sidebar a.btn-sair:hover { background: #ef4444; color: white; }
+
         .content { margin-left: 280px; padding: 40px; width: calc(100% - 280px); }
         .aba { display: none; }
         .aba.active { display: block; animation: fadeIn 0.3s; }
@@ -25,11 +42,16 @@
 
     <div class="sidebar">
         <h2>MAZZSYS</h2>
-        <button onclick="tab('dash')" id="t-dash" class="btn-active"><i class="fas fa-home me-2"></i> Dashboard</button>
-        <button onclick="tab('os')" id="t-os"><i class="fas fa-file-invoice me-2"></i> Ordens (36)</button>
-        <button onclick="tab('est')" id="t-est"><i class="fas fa-boxes-stacked me-2"></i> Estoque (Vários)</button>
-        <button onclick="tab('cli')" id="t-cli"><i class="fas fa-users me-2"></i> Clientes (50)</button>
-        <button onclick="tab('fin')" id="t-fin"><i class="fas fa-wallet me-2"></i> Financeiro</button>
+        
+        <div class="nav-links">
+            <button onclick="tab('dash')" id="t-dash" class="btn-active"><i class="fas fa-home me-2"></i> Dashboard</button>
+            <button onclick="tab('os')" id="t-os"><i class="fas fa-file-invoice me-2"></i> Ordens (36)</button>
+            <button onclick="tab('est')" id="t-est"><i class="fas fa-boxes-stacked me-2"></i> Estoque</button>
+            <button onclick="tab('cli')" id="t-cli"><i class="fas fa-users me-2"></i> Clientes (50)</button>
+            <button onclick="tab('fin')" id="t-fin"><i class="fas fa-wallet me-2"></i> Financeiro</button>
+        </div>
+
+        <a href="index.html" class="btn-sair text-center"><i class="fas fa-sign-out-alt me-2"></i> Sair do Sistema</a>
     </div>
 
     <div class="content">
@@ -38,12 +60,12 @@
             <div class="row g-4">
                 <div class="col-md-4"><div class="card p-4 border-0 shadow-sm"><h6>O.S. TOTAIS</h6><h3>36</h3></div></div>
                 <div class="col-md-4"><div class="card p-4 border-0 shadow-sm"><h6>DATABASE CLIENTES</h6><h3>50</h3></div></div>
-                <div class="col-md-4"><div class="card p-4 border-0 shadow-sm text-success"><h6>SALDO LIQUIDO</h6><h3>R$ 15.420</h3></div></div>
+                <div class="col-md-4"><div class="card p-4 border-0 shadow-sm text-success"><h6>SALDO LÍQUIDO</h6><h3>R$ 15.420</h3></div></div>
             </div>
         </div>
 
         <div id="os" class="aba">
-            <h2 class="fw-bold mb-4">Listagem de O.S.</h2>
+            <h2 class="fw-bold mb-4">Listagem de O.S. (36)</h2>
             <div class="table-area">
                 <table class="table table-hover">
                     <thead class="sticky-top bg-white"><tr><th>OS</th><th>Cliente</th><th>Veículo</th><th>Status</th><th>Total</th></tr></thead>
@@ -53,7 +75,7 @@
         </div>
 
         <div id="cli" class="aba">
-            <h2 class="fw-bold mb-4">Base de Clientes</h2>
+            <h2 class="fw-bold mb-4">Base de Clientes (50)</h2>
             <div class="table-area">
                 <table class="table table-hover">
                     <thead class="sticky-top bg-white"><tr><th>ID</th><th>Nome</th><th>Veículo / Placa</th></tr></thead>
@@ -81,6 +103,7 @@
             <h2 class="fw-bold mb-4">Fluxo de Caixa</h2>
             <div class="card p-4 border-0 shadow-sm mb-4">
                 <h4 class="text-success">Total em Caixa: R$ 15.420,50</h4>
+                <p class="text-muted small">Balanço consolidado até 17 de fevereiro de 2026.</p>
             </div>
         </div>
     </div>
@@ -93,11 +116,12 @@
             document.querySelectorAll('.aba').forEach(a => a.classList.remove('active'));
             document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('btn-active'));
             document.getElementById(id).classList.add('active');
-            document.getElementById('t-' + id).classList.add('btn-active');
+            if(document.getElementById('t-' + id)) {
+                document.getElementById('t-' + id).classList.add('btn-active');
+            }
         }
 
         window.onload = function() {
-            // Povoar 50 Clientes
             let cliHtml = "";
             for(let i=1; i<=50; i++) {
                 let nome = nomes[i % 10];
@@ -106,7 +130,6 @@
             }
             document.getElementById('listaClientes').innerHTML = cliHtml;
 
-            // Povoar 36 OS
             let osHtml = "";
             for(let i=1; i<=36; i++) {
                 let status = i % 3 == 0 ? '<span class="badge bg-success badge-status">Finalizado</span>' : '<span class="badge bg-warning text-dark badge-status">Em Execução</span>';
