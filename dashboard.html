@@ -3,28 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MazzSys ERP - Gestão Automotiva</title>
+    <title>MazzSys ERP - Gestão de Performance</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --sidebar-bg: #1a1d20; --accent: #0d6efd; --body-bg: #f4f7f6; }
         body { background-color: var(--body-bg); font-family: 'Segoe UI', sans-serif; }
-
         .sidebar { width: 260px; height: 100vh; position: fixed; background: var(--sidebar-bg); color: white; z-index: 1000; }
         .sidebar-brand { padding: 25px; text-align: center; border-bottom: 1px solid #333; }
-        .sidebar a { padding: 15px 25px; display: block; color: #adb5bd; text-decoration: none; border-left: 4px solid transparent; cursor: pointer; }
+        .sidebar a { padding: 12px 25px; display: block; color: #adb5bd; text-decoration: none; border-left: 4px solid transparent; cursor: pointer; font-size: 0.95rem; }
         .sidebar a:hover, .sidebar a.active { background: #2c3136; color: white; border-left-color: var(--accent); }
-
         .main-content { margin-left: 260px; padding: 30px; }
         .page-section { display: none; }
         .page-section.active { display: block; }
-
         .card-custom { background: white; border: none; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .box-status { border-top: 5px solid; padding: 15px; border-radius: 8px; background: white; }
-        .box-occupied { border-color: #dc3545; }
-        .box-free { border-color: #198754; opacity: 0.8; }
-        
-        .placa-badge { background: #e9ecef; color: #495057; font-weight: 700; font-family: monospace; padding: 2px 6px; border-radius: 4px; border: 1px solid #ced4da; }
+        .stat-card { border-radius: 12px; padding: 20px; color: white; }
+        .bg-gradient-blue { background: linear-gradient(45deg, #0d6efd, #00d4ff); }
+        .bg-gradient-purple { background: linear-gradient(45deg, #6610f2, #6f42c1); }
         @media (max-width: 768px) { .sidebar { display: none; } .main-content { margin-left: 0; } }
     </style>
 </head>
@@ -33,15 +28,16 @@
     <div class="sidebar">
         <div class="sidebar-brand">
             <h4 class="text-primary fw-bold mb-0">MAZZSYS</h4>
-            <small class="text-muted">Mecânica & Engenharia</small>
+            <small class="text-muted">Engenharia de Processos</small>
         </div>
-        <nav class="mt-3">
+        <nav class="mt-2">
             <a onclick="showSection('resumo')" id="link-resumo" class="active"><i class="fas fa-chart-line me-2"></i> Dashboard</a>
+            <a onclick="showSection('equipe')" id="link-equipe"><i class="fas fa-wrench me-2"></i> Funcionários</a>
+            <a onclick="showSection('relatorios')" id="link-relatorios"><i class="fas fa-file-invoice-dollar me-2"></i> Relatórios BI</a>
             <a onclick="showSection('agenda')" id="link-agenda"><i class="fas fa-calendar-alt me-2"></i> Agenda & Boxes</a>
             <a onclick="showSection('financeiro')" id="link-financeiro"><i class="fas fa-wallet me-2"></i> Financeiro</a>
             <a onclick="showSection('estoque')" id="link-estoque"><i class="fas fa-box me-2"></i> Estoque</a>
             <a onclick="showSection('clientes')" id="link-clientes"><i class="fas fa-users me-2"></i> Clientes</a>
-            <a onclick="showSection('servicos')" id="link-servicos"><i class="fas fa-clipboard-list me-2"></i> O.S.</a>
             <hr class="mx-3 border-secondary">
             <a href="index.html" class="text-danger"><i class="fas fa-sign-out-alt me-2"></i> Sair</a>
         </nav>
@@ -50,120 +46,97 @@
     <div class="main-content">
         
         <div id="resumo" class="page-section active">
-            <h3 class="fw-bold mb-4">Painel de Controle</h3>
+            <h3 class="fw-bold mb-4">Painel Executivo</h3>
             <div class="row g-4 text-center">
-                <div class="col-md-4">
-                    <div class="card card-custom p-4 border-start border-primary border-5">
-                        <small class="text-muted fw-bold">O.S. ABERTAS</small>
-                        <h2 class="text-primary fw-bold">36</h2>
+                <div class="col-md-3">
+                    <div class="card card-custom p-3 border-start border-primary border-5">
+                        <small class="text-muted fw-bold">TICKET MÉDIO</small>
+                        <h4 class="fw-bold">R$ 1.250</h4>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card card-custom p-4 border-start border-success border-5">
-                        <small class="text-muted fw-bold">SALDO EM CONTA</small>
-                        <h2 class="text-success fw-bold">R$ 15.420,50</h2>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="card card-custom p-4 border-start border-danger border-5">
-                        <small class="text-muted fw-bold">BOXES OCUPADOS</small>
-                        <h2 class="text-danger fw-bold">3 / 4</h2>
+                <div class="col-md-3">
+                    <div class="card card-custom p-3 border-start border-success border-5">
+                        <small class="text-muted fw-bold">PRODUTIVIDADE</small>
+                        <h4 class="fw-bold">88%</h4>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="agenda" class="page-section">
-            <h3 class="fw-bold mb-4">Agenda de Serviços</h3>
-            <div class="row g-3 mb-4">
-                <div class="col-md-3"><div class="box-status box-occupied shadow-sm small"><strong>BOX 1:</strong> Hilux (Ocupado)</div></div>
-                <div class="col-md-3"><div class="box-status box-occupied shadow-sm small"><strong>BOX 2:</strong> Corolla (Ocupado)</div></div>
-                <div class="col-md-3"><div class="box-status box-free shadow-sm small"><strong>BOX 3:</strong> -- Livre --</div></div>
-                <div class="col-md-3"><div class="box-status box-occupied shadow-sm small"><strong>BOX 4:</strong> Compass (Ocupado)</div></div>
-            </div>
-            <div class="card card-custom p-3">
+        <div id="equipe" class="page-section">
+            <h3 class="fw-bold mb-4">Gestão de Mecânicos</h3>
+            <div class="card card-custom p-3 mb-4">
                 <table class="table table-hover align-middle">
-                    <thead><tr><th>Hora</th><th>Cliente</th><th>Serviço</th><th>Ação</th></tr></thead>
+                    <thead>
+                        <tr><th>Colaborador</th><th>Eficiência</th><th>Comissão (Mês)</th><th>Status</th><th>Escala</th></tr>
+                    </thead>
                     <tbody>
-                        <tr><td>08:00</td><td>Márcio Rodrigues</td><td>Revisão</td><td><button class="btn btn-primary btn-sm rounded-pill">Check-in</button></td></tr>
-                        <tr><td>09:30</td><td>Felipe Oliveira</td><td>Óleo</td><td><button class="btn btn-primary btn-sm rounded-pill">Check-in</button></td></tr>
+                        <tr>
+                            <td><strong>João Silva</strong><br><small class="text-muted">Mecânico Líder</small></td>
+                            <td><div class="progress" style="height: 8px;"><div class="progress-bar bg-success" style="width: 95%"></div></div></td>
+                            <td class="text-success fw-bold">R$ 3.420,00</td>
+                            <td><span class="badge bg-success">Em Serviço</span></td>
+                            <td>08:00 - 18:00</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ricardo Lima</strong><br><small class="text-muted">Alinhador</small></td>
+                            <td><div class="progress" style="height: 8px;"><div class="progress-bar bg-info" style="width: 78%"></div></div></td>
+                            <td class="text-success fw-bold">R$ 1.950,00</td>
+                            <td><span class="badge bg-warning">Almoço</span></td>
+                            <td>09:00 - 19:00</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <div id="financeiro" class="page-section">
-            <h3 class="fw-bold mb-4">Financeiro</h3>
-            <div class="row g-3 mb-4">
-                <div class="col-md-6"><div class="card bg-success text-white p-3 shadow-sm">Entradas: R$ 28.500</div></div>
-                <div class="col-md-6"><div class="card bg-danger text-white p-3 shadow-sm">Saídas: R$ 13.079</div></div>
-            </div>
-            <div class="card card-custom p-3">
-                <table class="table table-hover">
-                    <thead><tr><th>Data</th><th>Descrição</th><th>Valor</th></tr></thead>
-                    <tbody>
-                        <tr><td>17/02/2026</td><td>O.S. #3041</td><td class="text-success fw-bold">+ R$ 450,00</td></tr>
-                        <tr><td>16/02/2026</td><td>Compra Peças</td><td class="text-danger fw-bold">- R$ 2.400,00</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div id="estoque" class="page-section">
-            <h3 class="fw-bold mb-4">Estoque</h3>
-            <div class="card card-custom p-3">
-                <table class="table table-hover">
-                    <thead><tr><th>Item</th><th>Qtd</th><th>Status</th></tr></thead>
-                    <tbody>
-                        <tr><td>Óleo 5W30</td><td>120 un</td><td><span class="badge bg-success">OK</span></td></tr>
-                        <tr><td>Filtro Corolla</td><td>3 un</td><td><span class="badge bg-danger">REPOR</span></td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <div id="clientes" class="page-section">
-            <h3 class="fw-bold mb-4">Clientes</h3>
-            <div class="card card-custom p-3">
-                <table class="table table-hover">
-                    <thead><tr><th>Nome</th><th>Veículo/Placa</th></tr></thead>
-                    <tbody>
-                        <tr><td>Márcio Rodrigues</td><td>Hilux <span class="placa-badge">ABC-1001</span></td></tr>
-                        <tr><td>Felipe Oliveira</td><td>Corolla <span class="placa-badge">XYZ-2002</span></td></tr>
-                    </tbody>
-                </table>
+        <div id="relatorios" class="page-section">
+            <h3 class="fw-bold mb-4">Relatórios Estatísticos (BI)</h3>
+            <div class="row g-4 mb-4">
+                <div class="col-md-6">
+                    <div class="card card-custom p-4">
+                        <h6 class="fw-bold">Peças Mais Vendidas</h6>
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item d-flex justify-content-between">Óleo 5W30 <span class="badge bg-primary rounded-pill">120 un</span></li>
+                            <li class="list-group-item d-flex justify-content-between">Filtro Óleo Corolla <span class="badge bg-primary rounded-pill">45 un</span></li>
+                            <li class="list-group-item d-flex justify-content-between">Pastilha Hilux <span class="badge bg-primary rounded-pill">22 un</span></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card card-custom p-4">
+                        <h6 class="fw-bold">Origem dos Clientes</h6>
+                        <div class="d-flex align-items-center mb-2">
+                            <small class="me-2" style="width: 80px;">Instagram</small>
+                            <div class="progress flex-grow-1" style="height: 10px;"><div class="progress-bar bg-danger" style="width: 45%"></div></div>
+                        </div>
+                        <div class="d-flex align-items-center mb-2">
+                            <small class="me-2" style="width: 80px;">Indicação</small>
+                            <div class="progress flex-grow-1" style="height: 10px;"><div class="progress-bar bg-primary" style="width: 35%"></div></div>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <small class="me-2" style="width: 80px;">Google</small>
+                            <div class="progress flex-grow-1" style="height: 10px;"><div class="progress-bar bg-success" style="width: 20%"></div></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div id="servicos" class="page-section">
-            <h3 class="fw-bold mb-4">Ordens de Serviço</h3>
-            <div class="card card-custom p-3">
-                <table class="table table-hover">
-                    <thead><tr><th>Nº OS</th><th>Cliente</th><th>Status</th></tr></thead>
-                    <tbody>
-                        <tr><td>#3041</td><td>Márcio Rodrigues</td><td><span class="badge bg-success">Pronto</span></td></tr>
-                        <tr><td>#3042</td><td>Felipe Oliveira</td><td><span class="badge bg-warning">Manutenção</span></td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
+        <div id="agenda" class="page-section"> <h3 class="fw-bold">Agenda</h3> <p>Dados da Agenda ativos.</p> </div>
+        <div id="financeiro" class="page-section"> <h3 class="fw-bold">Financeiro</h3> <p>Dados Financeiros ativos.</p> </div>
+        <div id="estoque" class="page-section"> <h3 class="fw-bold">Estoque</h3> <p>Dados de Estoque ativos.</p> </div>
+        <div id="clientes" class="page-section"> <h3 class="fw-bold">Clientes</h3> <p>Base de 500 clientes ativa.</p> </div>
 
     </div>
 
     <script>
         function showSection(id) {
-            // Esconde todas as seções
-            const sections = document.querySelectorAll('.page-section');
-            sections.forEach(s => s.classList.remove('active'));
-            
-            // Remove 'active' de todos os links do menu
-            const links = document.querySelectorAll('.sidebar a');
-            links.forEach(a => a.classList.remove('active'));
-            
-            // Mostra a seção desejada e ativa o link
+            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            const activeLink = document.getElementById('link-' + id);
-            if(activeLink) activeLink.classList.add('active');
+            const link = document.getElementById('link-' + id);
+            if(link) link.classList.add('active');
         }
     </script>
 </body>
