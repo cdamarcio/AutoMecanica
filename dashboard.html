@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>MAZZSYS ERP - VERSÃO ESTÁVEL</title>
+    <title>MAZZSYS ERP - FINANCEIRO ATIVO</title>
     <style>
         body { font-family: sans-serif; margin: 0; display: flex; background: #f4f7f6; }
         .sidebar { width: 250px; height: 100vh; background: #1a1d21; color: white; position: fixed; padding: 20px; }
@@ -12,11 +12,13 @@
         .content { margin-left: 250px; padding: 40px; width: 100%; }
         .aba { display: none; }
         .aba.ativa { display: block; }
-        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        table { width: 100%; border-collapse: collapse; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
         th, td { padding: 15px; border: 1px solid #eee; text-align: left; }
         th { background: #0d6efd; color: white; }
         .badge-ok { background: #198754; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; }
         .badge-erro { background: #dc3545; color: white; padding: 5px 10px; border-radius: 4px; font-size: 12px; }
+        .card-fin { display: flex; gap: 20px; margin-bottom: 20px; }
+        .box-fin { flex: 1; padding: 20px; border-radius: 8px; color: white; text-align: center; }
     </style>
 </head>
 <body>
@@ -24,6 +26,7 @@
     <div class="sidebar">
         <h2>MAZZSYS</h2>
         <button onclick="ir('d')">Dashboard</button>
+        <button onclick="ir('f')">Financeiro</button>
         <button onclick="ir('e')">Estoque</button>
         <button onclick="ir('c')">Clientes</button>
         <br><br>
@@ -33,7 +36,31 @@
     <div class="content">
         <div id="d" class="aba ativa">
             <h1>Resumo do Sistema</h1>
-            <p>Seja bem-vindo ao MazzSys.</p>
+            <p>Controle de Engenharia e Manutenção MazzSys.</p>
+        </div>
+
+        <div id="f" class="aba">
+            <h1>Financeiro - Fluxo de Caixa</h1>
+            <div class="card-fin">
+                <div class="box-fin" style="background: #198754;">
+                    <small>ENTRADAS (MÊS)</small>
+                    <h2>R$ 28.500,00</h2>
+                </div>
+                <div class="box-fin" style="background: #dc3545;">
+                    <small>SAÍDAS (MÊS)</small>
+                    <h2>R$ 13.079,50</h2>
+                </div>
+            </div>
+            <table>
+                <thead>
+                    <tr><th>Data</th><th>Descrição</th><th>Valor</th><th>Status</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>17/02/2026</td><td>Recebimento O.S. #3041</td><td style="color:green; font-weight:bold;">+ R$ 450,00</td><td><span class="badge-ok">PAGO</span></td></tr>
+                    <tr><td>16/02/2026</td><td>Compra de Peças - Fornecedor X</td><td style="color:red; font-weight:bold;">- R$ 2.400,00</td><td><span class="badge-erro">PENDENTE</span></td></tr>
+                    <tr><td>15/02/2026</td><td>Aluguel Galpão</td><td style="color:red; font-weight:bold;">- R$ 3.500,00</td><td><span class="badge-ok">PAGO</span></td></tr>
+                </tbody>
+            </table>
         </div>
 
         <div id="e" class="aba">
@@ -67,12 +94,10 @@
 
     <script>
         function ir(id) {
-            // Esconde todas as abas
             var abas = document.getElementsByClassName('aba');
             for (var i = 0; i < abas.length; i++) {
                 abas[i].classList.remove('ativa');
             }
-            // Mostra a aba clicada
             document.getElementById(id).classList.add('ativa');
         }
     </script>
