@@ -2,99 +2,112 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>MAZZSYS ERP - OFICIAL</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>SISTEMA MAZZSYS - REPARO</title>
     <style>
-        body { background: #f4f7f6; display: flex; font-family: sans-serif; }
-        .menu { width: 250px; height: 100vh; background: #1a1d21; color: white; position: fixed; padding: 20px; }
-        .menu h2 { color: #0d6efd; font-size: 22px; text-align: center; margin-bottom: 30px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .menu button { width: 100%; background: none; border: none; color: #adb5bd; padding: 12px; text-align: left; cursor: pointer; border-radius: 5px; }
-        .menu button:hover, .active-btn { background: #343a40 !important; color: white !important; }
-        .content { margin-left: 250px; padding: 40px; width: 100%; }
-        .tela { display: none; }
-        .tela.ativa { display: block; }
-        .card-mini { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
-        .tabela-fixa { background: white; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: sans-serif; background: #f0f2f5; display: flex; }
+        
+        /* Menu Lateral */
+        .sidebar { width: 250px; height: 100vh; background: #1c1e21; color: white; position: fixed; padding: 20px; }
+        .sidebar h2 { color: #007bff; margin-bottom: 20px; text-align: center; }
+        .sidebar button { width: 100%; padding: 12px; margin-bottom: 5px; background: #333; color: white; border: none; cursor: pointer; text-align: left; border-radius: 4px; }
+        .sidebar button:hover { background: #444; }
+        
+        /* Area Principal */
+        .container { margin-left: 250px; padding: 40px; width: 100%; }
+        .aba { display: none; }
+        .aba.ativa { display: block; }
+        
+        /* Estilo das Tabelas e Cards */
+        .card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+        th { background: #333; color: white; }
+        .badge { padding: 5px 10px; border-radius: 12px; font-size: 12px; color: white; }
+        .bg-verde { background: green; }
+        .bg-azul { background: blue; }
     </style>
 </head>
 <body>
 
-    <div class="menu">
+    <div class="sidebar">
         <h2>MAZZSYS</h2>
-        <button onclick="mudar('d')" id="btn-d" class="active-btn">Dashboard</button>
-        <button onclick="mudar('o')" id="btn-o">Ordens de Serviço (36)</button>
-        <button onclick="mudar('c')" id="btn-c">Clientes (500)</button>
-        <button onclick="mudar('f')" id="btn-f">Financeiro</button>
-        <hr>
-        <a href="index.html" style="color:red; text-decoration:none; padding:10px;">Sair</a>
+        <button onclick="mudar('resumo')">1. Resumo</button>
+        <button onclick="mudar('ordens')">2. Ordens de Serviço (36)</button>
+        <button onclick="mudar('clientes')">3. Clientes (500)</button>
+        <button onclick="mudar('fin')">4. Financeiro</button>
+        <br><br>
+        <a href="index.html" style="color:red; text-decoration:none;">SAIR</a>
     </div>
 
-    <div class="content">
-        <div id="d" class="tela ativa">
-            <h3>Resumo da Oficina</h3>
-            <div class="row mt-4">
-                <div class="col-md-4"><div class="card-mini"><h6>OS ABERTAS</h6><h2>36</h2></div></div>
-                <div class="col-md-4"><div class="card-mini"><h6>CLIENTES</h6><h2>500</h2></div></div>
-                <div class="col-md-4"><div class="card-mini"><h6>SALDO</h6><h2 style="color:green">R$ 15.420</h2></div></div>
+    <div class="container">
+        
+        <div id="resumo" class="aba ativa">
+            <h1>Dashboard</h1>
+            <div class="card">
+                <h3>Resumo Operacional</h3>
+                <p>O.S. Abertas: <strong>36</strong></p>
+                <p>Clientes: <strong>500</strong></p>
+                <p>Caixa: <span style="color:green">R$ 15.420,50</span></p>
             </div>
         </div>
 
-        <div id="o" class="tela">
-            <h3>Lista de 36 Ordens de Serviço</h3>
-            <div class="tabela-fixa mt-4">
-                <table class="table table-striped mb-0">
-                    <thead class="table-dark">
-                        <tr><th>OS</th><th>Cliente</th><th>Veículo</th><th>Status</th><th>Valor</th></tr>
+        <div id="ordens" class="aba">
+            <h1>Ordens de Serviço (Total 36)</h1>
+            <div class="card">
+                <table>
+                    <thead>
+                        <tr><th>OS</th><th>Cliente</th><th>Status</th><th>Valor</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td>#3001</td><td>Márcio Rodrigues</td><td>Hilux SW4</td><td><span class="badge bg-success">Pronto</span></td><td>R$ 450,00</td></tr>
-                        <tr><td>#3002</td><td>Felipe Oliveira</td><td>Corolla</td><td><span class="badge bg-warning">Executando</span></td><td>R$ 1.200,00</td></tr>
-                        <tr><td>#3003</td><td>Adriano Silva</td><td>Fiat Toro</td><td><span class="badge bg-danger">Peças</span></td><td>R$ 890,00</td></tr>
-                        <tr><td>#3004</td><td>Carla Mendes</td><td>Jeep Compass</td><td><span class="badge bg-primary">Check-in</span></td><td>R$ 350,00</td></tr>
-                        <tr><td>#3005</td><td>Roberto Souza</td><td>Honda Civic</td><td><span class="badge bg-success">Pronto</span></td><td>R$ 2.100,00</td></tr>
-                        <tr><td>#3006</td><td>Ana Paula</td><td>Onix</td><td><span class="badge bg-warning">Mecânica</span></td><td>R$ 600,00</td></tr>
-                        <tr><td>#3007</td><td>Ricardo Santos</td><td>S10</td><td><span class="badge bg-info">Lavagem</span></td><td>R$ 150,00</td></tr>
-                        <tr><td colspan="5" class="text-center text-muted">... listagem de 36 ordens carregada ...</td></tr>
+                        <tr><td>#3001</td><td>Márcio Rodrigues</td><td><span class="badge bg-verde">Pronto</span></td><td>R$ 450</td></tr>
+                        <tr><td>#3002</td><td>Felipe Oliveira</td><td><span class="badge bg-azul">Executando</span></td><td>R$ 1.200</td></tr>
+                        <tr><td>#3003</td><td>Adriano Silva</td><td><span class="badge bg-azul">Diagnóstico</span></td><td>R$ 890</td></tr>
+                        <tr><td>#3004</td><td>Carla Mendes</td><td><span class="badge bg-verde">Pronto</span></td><td>R$ 350</td></tr>
+                        <tr><td>#3005</td><td>Roberto Souza</td><td><span class="badge bg-azul">Aguardando</span></td><td>R$ 2.100</td></tr>
                     </tbody>
                 </table>
+                <p style="margin-top:10px; color:#666;">Exibindo as principais ordens de serviço ativas...</p>
             </div>
         </div>
 
-        <div id="c" class="tela">
-            <h3>Base de Dados (500 Clientes)</h3>
-            <div class="tabela-fixa mt-4" style="max-height: 500px; overflow-y: scroll;">
-                <table class="table">
-                    <thead class="table-dark"><tr><th>Nome</th><th>Veículo</th><th>Placa</th></tr></thead>
+        <div id="clientes" class="aba">
+            <h1>Base de Clientes</h1>
+            <div class="card">
+                <table>
+                    <thead>
+                        <tr><th>Nome</th><th>Placa</th></tr>
+                    </thead>
                     <tbody>
-                        <tr><td>Márcio Rodrigues</td><td>Hilux</td><td>MZZ-2026</td></tr>
-                        <tr><td>Felipe Oliveira</td><td>Corolla</td><td>FEL-1010</td></tr>
-                        <tr><td>Adriano Silva</td><td>Toro</td><td>ADR-4589</td></tr>
-                        <tr><td>Carla Mendes</td><td>Compass</td><td>CRL-8800</td></tr>
-                        <tr><td>...</td><td>...</td><td>...</td></tr>
-                        <tr><td colspan="3" class="text-center">500 Registros no Banco de Dados MazzSys</td></tr>
+                        <tr><td>Márcio Rodrigues</td><td>MZZ-2026</td></tr>
+                        <tr><td>Felipe Oliveira</td><td>FEL-1010</td></tr>
+                        <tr><td>Adriano Silva</td><td>ADR-4589</td></tr>
+                        <tr><td>Carla Mendes</td><td>CRL-8800</td></tr>
                     </tbody>
                 </table>
+                <p>Simulação de 500 registros ativa.</p>
             </div>
         </div>
 
-        <div id="f" class="tela">
-            <h3>Financeiro</h3>
-            <div class="card-mini mt-4">
-                <h4 style="color:green">Entradas: R$ 28.500,00</h4>
-                <h4 style="color:red">Saídas: R$ 13.079,50</h4>
+        <div id="fin" class="aba">
+            <h1>Financeiro</h1>
+            <div class="card">
+                <h2 style="color:green">Entradas: R$ 28.500,00</h2>
+                <h2 style="color:red">Saídas: R$ 13.079,50</h2>
             </div>
         </div>
+
     </div>
 
     <script>
         function mudar(id) {
-            // Esconde todas
-            document.querySelectorAll('.tela').forEach(t => t.classList.remove('ativa'));
-            document.querySelectorAll('.menu button').forEach(b => b.classList.remove('active-btn'));
-            
-            // Mostra a clicada
+            // Esconde todas as abas
+            var abas = document.getElementsByClassName('aba');
+            for (var i = 0; i < abas.length; i++) {
+                abas[i].classList.remove('ativa');
+            }
+            // Mostra a selecionada
             document.getElementById(id).classList.add('ativa');
-            document.getElementById('btn-' + id).classList.add('active-btn');
         }
     </script>
 </body>
