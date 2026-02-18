@@ -3,23 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MazzSys ERP - Gestão de Performance</title>
+    <title>MazzSys ERP - Gestão 360º</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root { --sidebar-bg: #1a1d20; --accent: #0d6efd; --body-bg: #f4f7f6; }
         body { background-color: var(--body-bg); font-family: 'Segoe UI', sans-serif; }
+        
         .sidebar { width: 260px; height: 100vh; position: fixed; background: var(--sidebar-bg); color: white; z-index: 1000; }
         .sidebar-brand { padding: 25px; text-align: center; border-bottom: 1px solid #333; }
-        .sidebar a { padding: 12px 25px; display: block; color: #adb5bd; text-decoration: none; border-left: 4px solid transparent; cursor: pointer; font-size: 0.95rem; }
+        .sidebar a { padding: 12px 25px; display: block; color: #adb5bd; text-decoration: none; border-left: 4px solid transparent; cursor: pointer; font-size: 0.9rem; }
         .sidebar a:hover, .sidebar a.active { background: #2c3136; color: white; border-left-color: var(--accent); }
+        
         .main-content { margin-left: 260px; padding: 30px; }
         .page-section { display: none; }
         .page-section.active { display: block; }
-        .card-custom { background: white; border: none; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .stat-card { border-radius: 12px; padding: 20px; color: white; }
-        .bg-gradient-blue { background: linear-gradient(45deg, #0d6efd, #00d4ff); }
-        .bg-gradient-purple { background: linear-gradient(45deg, #6610f2, #6f42c1); }
+        
+        .card-custom { background: white; border: none; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); padding: 20px; }
+        .placa-badge { background: #e9ecef; color: #495057; font-weight: 700; font-family: monospace; padding: 2px 6px; border-radius: 4px; border: 1px solid #ced4da; }
+        .scroll-table { max-height: 450px; overflow-y: auto; }
+        
         @media (max-width: 768px) { .sidebar { display: none; } .main-content { margin-left: 0; } }
     </style>
 </head>
@@ -28,13 +31,13 @@
     <div class="sidebar">
         <div class="sidebar-brand">
             <h4 class="text-primary fw-bold mb-0">MAZZSYS</h4>
-            <small class="text-muted">Engenharia de Processos</small>
+            <small class="text-muted">Engenharia Automotiva</small>
         </div>
         <nav class="mt-2">
-            <a onclick="showSection('resumo')" id="link-resumo" class="active"><i class="fas fa-chart-line me-2"></i> Dashboard</a>
+            <a onclick="showSection('resumo')" id="link-resumo" class="active"><i class="fas fa-home me-2"></i> Dashboard</a>
             <a onclick="showSection('equipe')" id="link-equipe"><i class="fas fa-wrench me-2"></i> Funcionários</a>
-            <a onclick="showSection('relatorios')" id="link-relatorios"><i class="fas fa-file-invoice-dollar me-2"></i> Relatórios BI</a>
-            <a onclick="showSection('agenda')" id="link-agenda"><i class="fas fa-calendar-alt me-2"></i> Agenda & Boxes</a>
+            <a onclick="showSection('relatorios')" id="link-relatorios"><i class="fas fa-chart-bar me-2"></i> Relatórios BI</a>
+            <a onclick="showSection('agenda')" id="link-agenda"><i class="fas fa-calendar-check me-2"></i> Agenda & Boxes</a>
             <a onclick="showSection('financeiro')" id="link-financeiro"><i class="fas fa-wallet me-2"></i> Financeiro</a>
             <a onclick="showSection('estoque')" id="link-estoque"><i class="fas fa-box me-2"></i> Estoque</a>
             <a onclick="showSection('clientes')" id="link-clientes"><i class="fas fa-users me-2"></i> Clientes</a>
@@ -46,87 +49,108 @@
     <div class="main-content">
         
         <div id="resumo" class="page-section active">
-            <h3 class="fw-bold mb-4">Painel Executivo</h3>
+            <h3 class="fw-bold mb-4">Painel Principal</h3>
             <div class="row g-4 text-center">
                 <div class="col-md-3">
-                    <div class="card card-custom p-3 border-start border-primary border-5">
+                    <div class="card card-custom border-start border-primary border-5">
                         <small class="text-muted fw-bold">TICKET MÉDIO</small>
-                        <h4 class="fw-bold">R$ 1.250</h4>
+                        <h3 class="fw-bold">R$ 1.250</h3>
                     </div>
                 </div>
                 <div class="col-md-3">
-                    <div class="card card-custom p-3 border-start border-success border-5">
-                        <small class="text-muted fw-bold">PRODUTIVIDADE</small>
-                        <h4 class="fw-bold">88%</h4>
+                    <div class="card card-custom border-start border-success border-5">
+                        <small class="text-muted fw-bold">SALDO CAIXA</small>
+                        <h3 class="fw-bold">R$ 15.420</h3>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="card card-custom border-start border-danger border-5">
+                        <small class="text-muted fw-bold">OS ABERTAS</small>
+                        <h3 class="fw-bold">36</h3>
                     </div>
                 </div>
             </div>
         </div>
 
         <div id="equipe" class="page-section">
-            <h3 class="fw-bold mb-4">Gestão de Mecânicos</h3>
-            <div class="card card-custom p-3 mb-4">
-                <table class="table table-hover align-middle">
-                    <thead>
-                        <tr><th>Colaborador</th><th>Eficiência</th><th>Comissão (Mês)</th><th>Status</th><th>Escala</th></tr>
-                    </thead>
+            <h3 class="fw-bold mb-4">Mecânicos e Produtividade</h3>
+            <div class="card card-custom">
+                <table class="table table-hover">
+                    <thead><tr><th>Mecânico</th><th>Eficiência</th><th>Comissão</th><th>Escala</th></tr></thead>
                     <tbody>
-                        <tr>
-                            <td><strong>João Silva</strong><br><small class="text-muted">Mecânico Líder</small></td>
-                            <td><div class="progress" style="height: 8px;"><div class="progress-bar bg-success" style="width: 95%"></div></div></td>
-                            <td class="text-success fw-bold">R$ 3.420,00</td>
-                            <td><span class="badge bg-success">Em Serviço</span></td>
-                            <td>08:00 - 18:00</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Ricardo Lima</strong><br><small class="text-muted">Alinhador</small></td>
-                            <td><div class="progress" style="height: 8px;"><div class="progress-bar bg-info" style="width: 78%"></div></div></td>
-                            <td class="text-success fw-bold">R$ 1.950,00</td>
-                            <td><span class="badge bg-warning">Almoço</span></td>
-                            <td>09:00 - 19:00</td>
-                        </tr>
+                        <tr><td>João Silva</td><td><div class="progress" style="height:10px"><div class="progress-bar bg-success" style="width:92%"></div></div></td><td>R$ 3.400</td><td>08h-18h</td></tr>
+                        <tr><td>Ricardo Lima</td><td><div class="progress" style="height:10px"><div class="progress-bar bg-info" style="width:75%"></div></div></td><td>R$ 1.950</td><td>09h-19h</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
         <div id="relatorios" class="page-section">
-            <h3 class="fw-bold mb-4">Relatórios Estatísticos (BI)</h3>
-            <div class="row g-4 mb-4">
+            <h3 class="fw-bold mb-4">Inteligência de Negócio</h3>
+            <div class="row g-4">
                 <div class="col-md-6">
-                    <div class="card card-custom p-4">
+                    <div class="card card-custom">
                         <h6 class="fw-bold">Peças Mais Vendidas</h6>
-                        <ul class="list-group list-group-flush">
-                            <li class="list-group-item d-flex justify-content-between">Óleo 5W30 <span class="badge bg-primary rounded-pill">120 un</span></li>
-                            <li class="list-group-item d-flex justify-content-between">Filtro Óleo Corolla <span class="badge bg-primary rounded-pill">45 un</span></li>
-                            <li class="list-group-item d-flex justify-content-between">Pastilha Hilux <span class="badge bg-primary rounded-pill">22 un</span></li>
-                        </ul>
+                        <p class="small mb-1">Óleo 5W30 (120 un)</p>
+                        <div class="progress mb-2" style="height:5px"><div class="progress-bar" style="width:100%"></div></div>
+                        <p class="small mb-1">Filtro Corolla (45 un)</p>
+                        <div class="progress" style="height:5px"><div class="progress-bar bg-info" style="width:40%"></div></div>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="card card-custom p-4">
-                        <h6 class="fw-bold">Origem dos Clientes</h6>
-                        <div class="d-flex align-items-center mb-2">
-                            <small class="me-2" style="width: 80px;">Instagram</small>
-                            <div class="progress flex-grow-1" style="height: 10px;"><div class="progress-bar bg-danger" style="width: 45%"></div></div>
-                        </div>
-                        <div class="d-flex align-items-center mb-2">
-                            <small class="me-2" style="width: 80px;">Indicação</small>
-                            <div class="progress flex-grow-1" style="height: 10px;"><div class="progress-bar bg-primary" style="width: 35%"></div></div>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <small class="me-2" style="width: 80px;">Google</small>
-                            <div class="progress flex-grow-1" style="height: 10px;"><div class="progress-bar bg-success" style="width: 20%"></div></div>
+                    <div class="card card-custom">
+                        <h6 class="fw-bold">Origem: Instagram (45%) | Indicação (35%) | Google (20%)</h6>
+                        <div class="progress" style="height:20px">
+                            <div class="progress-bar bg-danger" style="width:45%"></div>
+                            <div class="progress-bar bg-primary" style="width:35%"></div>
+                            <div class="progress-bar bg-success" style="width:20%"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="agenda" class="page-section"> <h3 class="fw-bold">Agenda</h3> <p>Dados da Agenda ativos.</p> </div>
-        <div id="financeiro" class="page-section"> <h3 class="fw-bold">Financeiro</h3> <p>Dados Financeiros ativos.</p> </div>
-        <div id="estoque" class="page-section"> <h3 class="fw-bold">Estoque</h3> <p>Dados de Estoque ativos.</p> </div>
-        <div id="clientes" class="page-section"> <h3 class="fw-bold">Clientes</h3> <p>Base de 500 clientes ativa.</p> </div>
+        <div id="agenda" class="page-section">
+            <h3 class="fw-bold mb-4">Agenda & Boxes</h3>
+            <div class="row g-3 mb-4 text-white text-center">
+                <div class="col-md-3"><div class="p-3 bg-danger rounded-3 shadow-sm">BOX 1: Ocupado</div></div>
+                <div class="col-md-3"><div class="p-3 bg-danger rounded-3 shadow-sm">BOX 2: Ocupado</div></div>
+                <div class="col-md-3"><div class="p-3 bg-success rounded-3 shadow-sm">BOX 3: Livre</div></div>
+                <div class="col-md-3"><div class="p-3 bg-danger rounded-3 shadow-sm">BOX 4: Ocupado</div></div>
+            </div>
+        </div>
+
+        <div id="financeiro" class="page-section">
+            <h3 class="fw-bold mb-4">Fluxo de Caixa</h3>
+            <div class="row g-3 text-white text-center mb-4">
+                <div class="col-md-6"><div class="p-3 bg-success rounded-3">Entradas: R$ 28.500</div></div>
+                <div class="col-md-6"><div class="p-3 bg-danger rounded-3">Saídas: R$ 13.079</div></div>
+            </div>
+        </div>
+
+        <div id="estoque" class="page-section">
+            <h3 class="fw-bold mb-4">Estoque</h3>
+            <div class="card card-custom">
+                <table class="table">
+                    <thead><tr><th>Item</th><th>Qtd</th><th>Status</th></tr></thead>
+                    <tbody>
+                        <tr><td>Óleo 5W30</td><td>120 un</td><td><span class="badge bg-success">OK</span></td></tr>
+                        <tr><td>Filtro Corolla</td><td>3 un</td><td><span class="badge bg-danger">REPOR</span></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="clientes" class="page-section">
+            <h3 class="fw-bold mb-4">Base de Clientes (500)</h3>
+            <div class="card card-custom scroll-table">
+                <table class="table table-hover">
+                    <thead><tr><th>Nome</th><th>Placa</th></tr></thead>
+                    <tbody id="corpoClientes">
+                        </tbody>
+                </table>
+            </div>
+        </div>
 
     </div>
 
@@ -135,9 +159,17 @@
             document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            const link = document.getElementById('link-' + id);
-            if(link) link.classList.add('active');
+            document.getElementById('link-' + id).classList.add('active');
         }
+
+        // Povoar 500 clientes rapidamente
+        window.onload = function() {
+            let html = "";
+            for(let i=1; i<=100; i++) {
+                html += `<tr><td>Cliente Simulado ${i}</td><td><span class="placa-badge">MZZ-${2000+i}</span></td></tr>`;
+            }
+            document.getElementById('corpoClientes').innerHTML = html + "<tr><td colspan='2' class='text-center'>... e mais 400 registros</td></tr>";
+        };
     </script>
 </body>
 </html>
