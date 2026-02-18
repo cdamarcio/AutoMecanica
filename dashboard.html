@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MazzSys ERP - Dashboard</title>
+    <title>MazzSys ERP - Gestão Integrada</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -30,9 +30,10 @@
 
         /* Alternância de Telas */
         .page-section { display: none; }
-        .page-section.active { display: block; }
+        .page-section.active { display: block; animation: fadeIn 0.3s; }
 
-        /* Estilos de Estoque */
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
         .stock-low { color: #dc3545; font-weight: bold; }
         
         @media (max-width: 768px) {
@@ -57,14 +58,10 @@
             <small class="text-muted">Engenharia & Mecânica</small>
         </div>
         <nav class="mt-3">
-            <a onclick="showSection('resumo')" id="link-resumo" class="active">
-                <i class="fas fa-chart-line me-2"></i> Dashboard
-            </a>
-            <a onclick="showSection('estoque')" id="link-estoque">
-                <i class="fas fa-box me-2"></i> Estoque de Peças
-            </a>
+            <a onclick="showSection('resumo')" id="link-resumo" class="active"><i class="fas fa-chart-line me-2"></i> Dashboard</a>
+            <a onclick="showSection('estoque')" id="link-estoque"><i class="fas fa-box me-2"></i> Estoque</a>
+            <a onclick="showSection('clientes')" id="link-clientes"><i class="fas fa-users me-2"></i> Clientes</a>
             <a href="#"><i class="fas fa-clipboard-list me-2"></i> Ordens de Serviço</a>
-            <a href="#"><i class="fas fa-users me-2"></i> Clientes</a>
             <hr class="mx-3 border-secondary">
             <a href="index.html" class="text-danger"><i class="fas fa-sign-out-alt me-2"></i> Sair</a>
         </nav>
@@ -73,43 +70,55 @@
     <div class="main-content">
         
         <div id="resumo" class="page-section active">
-            <h3 class="fw-bold mb-4">Bem-vindo, Márcio</h3>
+            <h3 class="fw-bold mb-4">Painel Geral</h3>
             <div class="row g-4">
                 <div class="col-md-4">
                     <div class="card border-0 shadow-sm p-4">
-                        <small class="text-muted fw-bold">FATURAMENTO</small>
-                        <h2 class="text-success fw-bold">R$ 1.850,00</h2>
+                        <small class="text-muted fw-bold">CLIENTES ATIVOS</small>
+                        <h2 class="text-primary fw-bold">124</h2>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card border-0 shadow-sm p-4">
-                        <small class="text-muted fw-bold">CARROS NO PÁTIO</small>
-                        <h2 class="text-primary fw-bold">08 Veículos</h2>
+                        <small class="text-muted fw-bold">OS ABERTAS</small>
+                        <h2 class="text-warning fw-bold">12</h2>
                     </div>
                 </div>
             </div>
         </div>
 
         <div id="estoque" class="page-section">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h3 class="fw-bold">Controle de Estoque</h3>
-                <button class="btn btn-primary" onclick="alert('Funcionalidade Demo')">+ Adicionar Peça</button>
+            <h3 class="fw-bold mb-4">Estoque de Peças</h3>
+            <div class="card border-0 shadow-sm">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr><th>Peça</th><th>Qtd.</th><th>Status</th></tr>
+                        </thead>
+                        <tbody id="corpoEstoque"></tbody>
+                    </table>
+                </div>
             </div>
+        </div>
 
+        <div id="clientes" class="page-section">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-bold">Gestão de Clientes</h3>
+                <button class="btn btn-primary" onclick="alert('Novo Cliente - Demo')">+ Adicionar Cliente</button>
+            </div>
             <div class="card border-0 shadow-sm">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>Cód.</th>
-                                <th>Peça</th>
-                                <th>Categoria</th>
-                                <th>Qtd.</th>
-                                <th>Status</th>
-                                <th>Preço</th>
+                                <th>Nome do Cliente</th>
+                                <th>Veículo</th>
+                                <th>Telefone</th>
+                                <th>Última Visita</th>
+                                <th>Ações</th>
                             </tr>
                         </thead>
-                        <tbody id="corpoEstoque">
+                        <tbody id="corpoClientes">
                             </tbody>
                     </table>
                 </div>
@@ -118,61 +127,65 @@
 
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Dados do Estoque
+        // Dados de Exemplo
         const pecas = [
-            { id: '101', nome: 'Óleo 5W30 Sintético', cat: 'Lubrificantes', qtd: 45, min: 10, preco: 55.00 },
-            { id: '102', nome: 'Filtro de Óleo - Corolla', cat: 'Filtros', qtd: 3, min: 5, preco: 38.00 },
-            { id: '103', nome: 'Pastilha Freio Dianteira', cat: 'Freios', qtd: 12, min: 4, preco: 185.00 },
-            { id: '104', nome: 'Lâmpada H7 Philips', cat: 'Elétrica', qtd: 2, min: 5, preco: 45.00 }
+            { nome: 'Óleo 5W30 Sintético', qtd: 45, min: 10 },
+            { nome: 'Filtro de Óleo - Corolla', qtd: 3, min: 5 }
         ];
 
-        // Função para carregar os dados na tabela
-        function atualizarTabela() {
-            const corpo = document.getElementById('corpoEstoque');
-            corpo.innerHTML = '';
+        const clientes = [
+            { nome: 'Márcio Rodrigues', carro: 'Hilux SW4', tel: '(62) 99999-0000', data: '10/02/2026' },
+            { nome: 'Felipe Oliveira', carro: 'Toyota Corolla', tel: '(62) 98888-1111', data: '15/02/2026' },
+            { nome: 'Ana Beatriz', carro: 'Jeep Compass', tel: '(62) 97777-2222', data: '05/01/2026' }
+        ];
 
-            pecas.forEach(p => {
-                const baixoEstoque = p.qtd <= p.min;
-                corpo.innerHTML += `
+        function atualizarTabelas() {
+            // Atualiza Estoque
+            const cEstoque = document.getElementById('corpoEstoque');
+            if(cEstoque) {
+                cEstoque.innerHTML = pecas.map(p => `
                     <tr>
-                        <td class="text-muted">#${p.id}</td>
-                        <td class="fw-bold">${p.nome}</td>
-                        <td>${p.cat}</td>
-                        <td class="${baixoEstoque ? 'stock-low' : ''}">${p.qtd} un</td>
-                        <td>
-                            <span class="badge ${baixoEstoque ? 'bg-danger' : 'bg-success'}">
-                                ${baixoEstoque ? 'REPOR' : 'OK'}
-                            </span>
-                        </td>
-                        <td>R$ ${p.preco.toFixed(2)}</td>
+                        <td>${p.nome}</td>
+                        <td class="${p.qtd <= p.min ? 'stock-low' : ''}">${p.qtd} un</td>
+                        <td><span class="badge ${p.qtd <= p.min ? 'bg-danger' : 'bg-success'}">${p.qtd <= p.min ? 'REPOR' : 'OK'}</span></td>
                     </tr>
-                `;
-            });
+                `).join('');
+            }
+
+            // Atualiza Clientes
+            const cClientes = document.getElementById('corpoClientes');
+            if(cClientes) {
+                cClientes.innerHTML = clientes.map(c => `
+                    <tr>
+                        <td class="fw-bold">${c.nome}</td>
+                        <td>${c.carro}</td>
+                        <td>${c.tel}</td>
+                        <td>${c.data}</td>
+                        <td>
+                            <a href="https://wa.me/55${c.tel.replace(/\D/g,'')}" target="_blank" class="btn btn-sm btn-success"><i class="fab fa-whatsapp"></i></a>
+                            <button class="btn btn-sm btn-light border"><i class="fas fa-edit"></i></button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
         }
 
-        // Função para mudar de tela
         function showSection(id) {
-            // Esconde todas as telas
             document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
-            // Desativa links do menu
             document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
-
-            // Ativa a tela escolhida
             document.getElementById(id).classList.add('active');
             document.getElementById('link-' + id).classList.add('active');
-
-            if(id === 'estoque') atualizarTabela();
-            if(window.innerWidth < 768) toggleSidebar(); // Fecha menu no mobile
+            if(window.innerWidth < 768) toggleSidebar();
         }
 
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('active');
         }
 
-        // Inicializa a tabela
-        atualizarTabela();
+        // Inicia
+        atualizarTabelas();
     </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
