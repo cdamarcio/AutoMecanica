@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MazzSys ERP - Gestão Automotiva</title>
+    <title>MazzSys ERP - Gestão Profissional</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -15,10 +15,11 @@
         .sidebar a:hover, .sidebar a.active { background: #2c3136; color: white; border-left-color: var(--accent); }
         .main-content { margin-left: 260px; padding: 30px; transition: 0.3s; }
         .page-section { display: none; }
-        .page-section.active { display: block; animation: fadeIn 0.3s; }
+        .page-section.active { display: block; animation: fadeIn 0.2s; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .placa-badge { background: #e9ecef; color: #495057; font-weight: 700; font-family: monospace; padding: 2px 6px; border-radius: 4px; border: 1px solid #ced4da; font-size: 0.85rem; }
         .stock-low { color: #dc3545; font-weight: bold; }
+        .scroll-area { max-height: 600px; overflow-y: auto; }
         @media (max-width: 768px) { .sidebar { margin-left: -260px; } .sidebar.active { margin-left: 0; } .main-content { margin-left: 0; padding-top: 70px; } }
     </style>
 </head>
@@ -32,7 +33,7 @@
     <div class="sidebar" id="sidebar">
         <div class="sidebar-brand">
             <h4 class="text-primary fw-bold mb-0">MAZZSYS</h4>
-            <small class="text-muted">Engenharia & Mecânica</small>
+            <small class="text-muted">Gestão Automotiva</small>
         </div>
         <nav class="mt-3">
             <a onclick="showSection('resumo')" id="link-resumo" class="active"><i class="fas fa-chart-line me-2"></i> Dashboard</a>
@@ -46,36 +47,36 @@
 
     <div class="main-content">
         <div id="resumo" class="page-section active">
-            <h3 class="fw-bold mb-4">Painel de Controle</h3>
+            <h3 class="fw-bold mb-4">Painel Administrativo</h3>
             <div class="row g-4">
                 <div class="col-md-4">
-                    <div class="card border-0 shadow-sm p-4">
-                        <small class="text-muted fw-bold">O.S. ATIVAS</small>
-                        <h2 class="text-primary fw-bold">06</h2>
+                    <div class="card border-0 shadow-sm p-4 border-start border-primary border-4">
+                        <small class="text-muted fw-bold">O.S. ABERTAS</small>
+                        <h2 class="text-primary fw-bold">36</h2>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card border-0 shadow-sm p-4">
-                        <small class="text-muted fw-bold">CLIENTES CADASTRADOS</small>
-                        <h2 class="text-dark fw-bold">42</h2>
+                    <div class="card border-0 shadow-sm p-4 border-start border-dark border-4">
+                        <small class="text-muted fw-bold">TOTAL CLIENTES</small>
+                        <h2 class="text-dark fw-bold">500</h2>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card border-0 shadow-sm p-4">
-                        <small class="text-muted fw-bold">FATURAMENTO MÊS</small>
-                        <h2 class="text-success fw-bold">R$ 12.450</h2>
+                    <div class="card border-0 shadow-sm p-4 border-start border-success border-4">
+                        <small class="text-muted fw-bold">VALOR EM ABERTO</small>
+                        <h2 class="text-success fw-bold">R$ 42.180</h2>
                     </div>
                 </div>
             </div>
         </div>
 
         <div id="estoque" class="page-section">
-            <h3 class="fw-bold mb-4">Estoque de Peças</h3>
+            <h3 class="fw-bold mb-4">Variedade de Estoque</h3>
             <div class="card border-0 shadow-sm">
-                <div class="table-responsive">
+                <div class="table-responsive scroll-area">
                     <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
-                            <tr><th>Item</th><th>Categoria</th><th>Qtd</th><th>Mínimo</th><th>Status</th></tr>
+                        <thead class="table-light sticky-top">
+                            <tr><th>Item / Descrição</th><th>Categoria</th><th>Qtd</th><th>Status</th></tr>
                         </thead>
                         <tbody id="corpoEstoque"></tbody>
                     </table>
@@ -84,12 +85,15 @@
         </div>
 
         <div id="clientes" class="page-section">
-            <h3 class="fw-bold mb-4">Base de Clientes</h3>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-bold">Base de 500 Clientes</h3>
+                <span class="badge bg-primary">Modo Simulação Ativo</span>
+            </div>
             <div class="card border-0 shadow-sm">
-                <div class="table-responsive">
+                <div class="table-responsive scroll-area">
                     <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
-                            <tr><th>Nome</th><th>Veículo / Placa</th><th>WhatsApp</th></tr>
+                        <thead class="table-light sticky-top">
+                            <tr><th>Nome Completo</th><th>Veículo / Placa</th><th>Contato</th></tr>
                         </thead>
                         <tbody id="corpoClientes"></tbody>
                     </table>
@@ -98,12 +102,12 @@
         </div>
 
         <div id="servicos" class="page-section">
-            <h3 class="fw-bold mb-4">Ordens de Serviço</h3>
+            <h3 class="fw-bold mb-4">Gestão de Serviços (36 O.S.)</h3>
             <div class="card border-0 shadow-sm">
-                <div class="table-responsive">
+                <div class="table-responsive scroll-area">
                     <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
-                            <tr><th>Nº</th><th>Cliente</th><th>Veículo</th><th>Status</th><th>Total</th></tr>
+                        <thead class="table-light sticky-top">
+                            <tr><th>Nº OS</th><th>Cliente</th><th>Status</th><th>Valor</th></tr>
                         </thead>
                         <tbody id="corpoOS"></tbody>
                     </table>
@@ -114,44 +118,52 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        const dados = {
-            estoque: [
-                { nome: 'Óleo 5W30 Sintético', cat: 'Lubrificantes', qtd: 48, min: 10 },
-                { nome: 'Filtro de Óleo Corolla', cat: 'Filtros', qtd: 4, min: 5 },
-                { nome: 'Pastilha Freio Diant. Hilux', cat: 'Freios', qtd: 12, min: 4 },
-                { nome: 'Lâmpada H7 Philips', cat: 'Elétrica', qtd: 2, min: 6 },
-                { nome: 'Fluido de Freio DOT4', cat: 'Lubrificantes', qtd: 15, min: 5 }
-            ],
-            clientes: [
-                { nome: 'Márcio Oliveira', carro: 'Hilux SW4', placa: 'MZZ-2026', tel: '62999990000' },
-                { nome: 'Felipe Oliveira', carro: 'Toyota Corolla', placa: 'FEL-1010', tel: '62988881111' },
-                { nome: 'Adriano Souza', carro: 'Fiat Toro', placa: 'ADS-4589', tel: '62977772222' },
-                { nome: 'Carla Mendes', carro: 'Jeep Compass', placa: 'CRL-8800', tel: '62966663333' }
-            ],
-            os: [
-                { id: '2040', cliente: 'Márcio Oliveira', carro: 'Hilux', status: 'Manutenção', valor: '1.250,00', cor: 'warning' },
-                { id: '2041', cliente: 'Felipe Oliveira', carro: 'Corolla', status: 'Pronto', valor: '450,00', cor: 'success' },
-                { id: '2042', cliente: 'Carla Mendes', carro: 'Compass', status: 'Aguardando Peça', valor: '2.800,00', cor: 'info' },
-                { id: '2043', cliente: 'Adriano Souza', carro: 'Toro', status: 'Orçamento', valor: '980,00', cor: 'secondary' }
-            ]
-        };
+        // Gerador de Dados de Estoque (Mais variedade)
+        const estoqueItens = [
+            { n: 'Óleo 5W30 Sintético', c: 'Lubrificantes', q: 120, m: 20 },
+            { n: 'Filtro de Óleo Corolla', c: 'Filtros', q: 8, m: 10 },
+            { n: 'Pastilha Freio Diant. Hilux', c: 'Freios', q: 25, m: 5 },
+            { n: 'Lâmpada H7 Philips', c: 'Elétrica', q: 4, m: 10 },
+            { n: 'Fluido de Freio DOT4', c: 'Fluidos', q: 30, m: 10 },
+            { n: 'Bateria 60Ah Moura', c: 'Elétrica', q: 15, m: 5 },
+            { n: 'Vela de Ignição NGK', c: 'Motor', q: 80, m: 20 },
+            { n: 'Correia Dentada Gates', c: 'Motor', q: 12, m: 4 },
+            { n: 'Amortecedor Diant. Monroe', c: 'Suspensão', q: 6, m: 4 },
+            { n: 'Limpador Para-brisa 22"', c: 'Acessórios', q: 45, m: 10 }
+        ];
 
-        function atualizarTabelas() {
-            // Estoque
-            document.getElementById('corpoEstoque').innerHTML = dados.estoque.map(i => {
-                const baixo = i.qtd <= i.min;
-                return `<tr><td>${i.nome}</td><td><small>${i.cat}</small></td><td class="${baixo?'stock-low':''}">${i.qtd} un</td><td>${i.min}</td><td><span class="badge ${baixo?'bg-danger':'bg-success'}">${baixo?'REPOR':'OK'}</span></td></tr>`;
+        // Gerador de Clientes (500 itens)
+        function gerarClientes() {
+            const nomes = ["Márcio", "Felipe", "Adriano", "Carla", "Ricardo", "Juliana", "Marcos", "Patrícia", "Roberto", "Fernanda"];
+            const sobrenomes = ["Oliveira", "Silva", "Santos", "Mendes", "Quadros", "Costa", "Pereira", "Souza"];
+            const carros = ["Hilux", "Corolla", "Civic", "Toro", "Compass", "Onix", "Gol", "HB20"];
+            
+            let html = "";
+            for(let i=1; i<=500; i++) {
+                const nome = nomes[Math.floor(Math.random()*nomes.length)] + " " + sobrenomes[Math.floor(Math.random()*sobrenomes.length)];
+                const carro = carros[Math.floor(Math.random()*carros.length)];
+                const placa = "ABC-" + (1000 + i);
+                html += `<tr><td>${nome}</td><td>${carro} <span class="placa-badge">${placa}</span></td><td>629${90000000 + i}</td></tr>`;
+            }
+            document.getElementById('corpoClientes').innerHTML = html;
+        }
+
+        // Gerador de O.S. (36 itens)
+        function gerarOS() {
+            let html = "";
+            const status = [{t:'Manutenção', c:'warning'}, {t:'Pronto', c:'success'}, {t:'Aguardando', c:'info'}, {t:'Orçamento', c:'secondary'}];
+            for(let i=1; i<=36; i++) {
+                const s = status[Math.floor(Math.random()*status.length)];
+                html += `<tr><td class="text-primary fw-bold">#30${i}</td><td>Cliente Simulado ${i}</td><td><span class="badge bg-${s.c}">${s.t}</span></td><td class="fw-bold">R$ ${(Math.random()*2000 + 100).toFixed(2)}</td></tr>`;
+            }
+            document.getElementById('corpoOS').innerHTML = html;
+        }
+
+        function carregarEstoque() {
+            document.getElementById('corpoEstoque').innerHTML = estoqueItens.map(i => {
+                const baixo = i.q <= i.m;
+                return `<tr><td>${i.n}</td><td>${i.c}</td><td class="${baixo?'stock-low':''}">${i.q} un</td><td><span class="badge ${baixo?'bg-danger':'bg-success'}">${baixo?'REPOR':'OK'}</span></td></tr>`;
             }).join('');
-
-            // Clientes
-            document.getElementById('corpoClientes').innerHTML = dados.clientes.map(c => `
-                <tr><td><strong>${c.nome}</strong></td><td>${c.carro} <span class="placa-badge">${c.placa}</span></td><td><a href="https://wa.me/55${c.tel}" class="btn btn-sm btn-success"><i class="fab fa-whatsapp"></i></a></td></tr>
-            `).join('');
-
-            // O.S.
-            document.getElementById('corpoOS').innerHTML = dados.os.map(o => `
-                <tr><td class="text-primary fw-bold">#${o.id}</td><td>${o.cliente}</td><td>${o.carro}</td><td><span class="badge bg-${o.cor}">${o.status}</span></td><td class="fw-bold">R$ ${o.valor}</td></tr>
-            `).join('');
         }
 
         function showSection(id) {
@@ -163,8 +175,11 @@
         }
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
-        
-        atualizarTabelas();
+
+        // Inicialização
+        gerarClientes();
+        gerarOS();
+        carregarEstoque();
     </script>
 </body>
 </html>
