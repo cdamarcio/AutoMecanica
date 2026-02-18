@@ -2,120 +2,170 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>MAZZSYS ERP - VERSÃO FINAL</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MazzSys ERP | Gestão de Alta Performance</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background: #f4f7f6; display: flex; font-family: 'Segoe UI', sans-serif; margin: 0; }
+        :root { --sidebar-bg: #1e293b; --accent: #3b82f6; --body-bg: #f1f5f9; --text-main: #334155; }
+        body { background-color: var(--body-bg); font-family: 'Inter', system-ui, -apple-system, sans-serif; color: var(--text-main); margin: 0; display: flex; }
+
+        /* Sidebar Moderna */
+        .sidebar { width: 280px; height: 100vh; background: var(--sidebar-bg); color: white; position: fixed; padding: 0; display: flex; flex-direction: column; box-shadow: 4px 0 10px rgba(0,0,0,0.1); }
+        .sidebar-header { padding: 30px 20px; text-align: center; background: #0f172a; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .sidebar-header h4 { font-weight: 800; letter-spacing: -1px; color: var(--accent); margin: 0; }
         
-        /* Menu Lateral */
-        .sidebar { width: 250px; height: 100vh; background: #1a1d21; color: white; position: fixed; padding: 20px; }
-        .sidebar h2 { color: #0d6efd; text-align: center; margin-bottom: 20px; font-weight: bold; }
+        .nav-links { flex-grow: 1; padding: 20px 15px; }
+        .sidebar button { width: 100%; padding: 12px 15px; margin-bottom: 8px; background: transparent; color: #94a3b8; border: none; cursor: pointer; text-align: left; border-radius: 10px; transition: 0.3s; font-size: 0.95rem; font-weight: 500; }
+        .sidebar button:hover, .btn-active { background: rgba(59, 130, 246, 0.15) !important; color: white !important; }
+        .sidebar button i { margin-right: 12px; width: 20px; text-align: center; }
+
+        /* Logout Estilizado */
+        .logout-box { padding: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .btn-logout { display: block; width: 100%; padding: 12px; background: #ef4444; color: white; text-align: center; border-radius: 10px; text-decoration: none; font-weight: 700; transition: 0.3s; box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.4); }
+        .btn-logout:hover { background: #dc2626; color: white; transform: translateY(-2px); }
+
+        /* Área de Conteúdo */
+        .main-content { margin-left: 280px; padding: 40px; width: calc(100% - 280px); }
+        .aba { display: none; animation: slideUp 0.4s ease-out; }
+        .aba.active { display: block; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Estilo dos Cards */
+        .card-kpi { background: white; border-radius: 20px; padding: 30px; border: none; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.06); transition: 0.3s; height: 100%; }
+        .card-kpi:hover { transform: translateY(-5px); box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); }
+        .card-kpi h2 { font-weight: 800; font-size: 2.5rem; margin: 10px 0 0 0; color: #1e293b; }
+        .card-kpi span { font-size: 0.85rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.05em; }
+
+        /* Tabelas Profissionais */
+        .table-container { background: white; border-radius: 20px; padding: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; }
+        .table thead th { background: #f8fafc; color: #64748b; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; border: none; padding: 15px 20px; }
+        .table td { padding: 15px 20px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; font-size: 0.95rem; }
+        .placa { background: #1e293b; color: white; font-family: 'Roboto Mono', monospace; font-weight: 700; padding: 4px 8px; border-radius: 6px; font-size: 0.8rem; }
         
-        /* BOTÃO SAIR EM DESTAQUE NO TOPO */
-        .btn-sair { display: block; width: 100%; background: #dc3545; color: white; text-align: center; padding: 10px; border-radius: 5px; text-decoration: none; font-weight: bold; margin-bottom: 30px; }
-        .btn-sair:hover { background: #a71d2a; color: white; }
+        .badge-status { padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
 
-        .sidebar button { width: 100%; background: #2c3136; border: none; color: #adb5bd; padding: 12px; text-align: left; cursor: pointer; border-radius: 5px; margin-bottom: 8px; }
-        .sidebar button:hover, .btn-ativa { background: #0d6efd !important; color: white !important; }
-
-        /* Conteúdo */
-        .main { margin-left: 250px; padding: 40px; width: 100%; }
-        .aba { display: none; }
-        .aba.ativa { display: block; }
-
-        .card-povoado { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        .placa { background: #333; color: white; padding: 2px 6px; border-radius: 4px; font-family: monospace; font-size: 13px; }
+        @media (max-width: 992px) { .sidebar { width: 80px; } .sidebar h4, .sidebar span, .sidebar button span { display: none; } .main-content { margin-left: 80px; } }
     </style>
 </head>
 <body>
 
-    <div class="sidebar">
-        <h2>MAZZSYS</h2>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h4>MAZZSYS</h4>
+            <small style="font-size: 10px; color: #475569;">TECNOLOGIA AUTOMOTIVA</small>
+        </div>
         
-        <a href="index.html" class="btn-sair">SAIR DO SISTEMA</a>
+        <nav class="nav-links">
+            <button onclick="tab('dash')" id="t-dash" class="btn-active"><i class="fas fa-chart-pie"></i> <span>Dashboard</span></button>
+            <button onclick="tab('os')" id="t-os"><i class="fas fa-file-invoice"></i> <span>Ordens de Serviço</span></button>
+            <button onclick="tab('cli')" id="t-cli"><i class="fas fa-users"></i> <span>Clientes (50)</span></button>
+            <button onclick="tab('est')" id="t-est"><i class="fas fa-boxes-stacked"></i> <span>Estoque</span></button>
+            <button onclick="tab('fin')" id="t-fin"><i class="fas fa-wallet"></i> <span>Financeiro</span></button>
+        </nav>
 
-        <button onclick="mudar('d')" id="b-d" class="btn-ativa">Dashboard</button>
-        <button onclick="mudar('o')" id="b-o">Ordens de Serviço (36)</button>
-        <button onclick="mudar('c')" id="b-c">Clientes (50)</button>
-        <button onclick="mudar('f')" id="b-f">Financeiro</button>
-        <button onclick="mudar('e')" id="b-e">Estoque</button>
-    </div>
+        <div class="logout-box">
+            <a href="index.html" class="btn-logout"><i class="fas fa-sign-out-alt me-2"></i> <span>SAIR</span></a>
+        </div>
+    </aside>
 
-    <div class="main">
-        <div id="d" class="aba ativa">
-            <h3>Painel de Controle</h3>
-            <div class="row mt-4">
-                <div class="col-md-4"><div class="card-povoado text-center"><h6>OS ATIVAS</h6><h2>36</h2></div></div>
-                <div class="col-md-4"><div class="card-povoado text-center"><h6>CLIENTES</h6><h2>50</h2></div></div>
-                <div class="col-md-4"><div class="card-povoado text-center text-success"><h6>SALDO</h6><h2>R$ 15.420</h2></div></div>
+    <main class="main-content">
+        
+        <div id="dash" class="aba active">
+            <h3 class="fw-bold mb-4">Visão Geral da Operação</h3>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card-kpi">
+                        <span>O.S. em Aberto</span>
+                        <h2>36</h2>
+                        <div class="mt-3 text-primary small fw-bold"><i class="fas fa-arrow-up"></i> +5 hoje</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card-kpi">
+                        <span>Base de Clientes</span>
+                        <h2>50</h2>
+                        <div class="mt-3 text-muted small fw-bold">Ativos no Sistema</div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card-kpi" style="border-right: 5px solid #10b981;">
+                        <span>Saldo em Conta</span>
+                        <h2 class="text-success">R$ 15.420</h2>
+                        <div class="mt-3 text-success small fw-bold"><i class="fas fa-check"></i> Balanço Positivo</div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div id="o" class="aba">
-            <h3>Ordens de Serviço (36 Registros)</h3>
-            <div class="card-povoado p-0 overflow-hidden">
-                <table class="table table-striped mb-0">
-                    <thead class="table-dark"><tr><th>OS</th><th>Cliente</th><th>Veículo</th><th>Valor</th></tr></thead>
+        <div id="os" class="aba">
+            <h3 class="fw-bold mb-4">Gestão de Ordens</h3>
+            <div class="table-container">
+                <table class="table mb-0">
+                    <thead><tr><th>Nº OS</th><th>Cliente</th><th>Veículo</th><th>Status</th><th>Valor</th></tr></thead>
                     <tbody id="corpoOS"></tbody>
                 </table>
             </div>
         </div>
 
-        <div id="c" class="aba">
-            <h3>Base de Clientes (50 Registros)</h3>
-            <div class="card-povoado p-0 overflow-hidden" style="max-height: 500px; overflow-y: auto;">
-                <table class="table table-hover mb-0">
-                    <thead class="table-dark"><tr><th>Nome</th><th>Veículo</th><th>Placa</th></tr></thead>
-                    <tbody id="corpoCLI"></tbody>
+        <div id="cli" class="aba">
+            <h3 class="fw-bold mb-4">Relacional de Clientes</h3>
+            <div class="table-container" style="max-height: 60vh; overflow-y: auto;">
+                <table class="table mb-0">
+                    <thead><tr><th>Nome</th><th>Veículo / Placa</th><th>Última Visita</th></tr></thead>
+                    <tbody id="corpoCli"></tbody>
                 </table>
             </div>
         </div>
 
-        <div id="f" class="aba">
-            <h3>Financeiro</h3>
-            <div class="card-povoado">
-                <h4 style="color:green">Receita: R$ 28.500,00</h4>
-                <h4 style="color:red">Despesas: R$ 13.079,50</h4>
-            </div>
-        </div>
-
-        <div id="e" class="aba">
-            <h3>Estoque</h3>
-            <div class="card-povoado">
+        <div id="est" class="aba">
+            <h3 class="fw-bold mb-4">Controle de Inventário</h3>
+            <div class="table-container">
                 <table class="table">
-                    <thead><tr><th>Item</th><th>Qtd</th></tr></thead>
+                    <thead><tr><th>Peça</th><th>Qtd</th><th>Mínimo</th><th>Status</th></tr></thead>
                     <tbody>
-                        <tr><td>Óleo 5W30</td><td>120 un</td></tr>
-                        <tr><td>Filtro Óleo</td><td>5 un</td></tr>
+                        <tr><td>Óleo 5W30 Lubrax</td><td>120 un</td><td>20 un</td><td><span class="badge bg-success badge-status">OK</span></td></tr>
+                        <tr><td>Filtro Óleo Corolla</td><td>5 un</td><td>10 un</td><td><span class="badge bg-danger badge-status">REPOR</span></td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
-    </div>
+
+        <div id="fin" class="aba">
+            <h3 class="fw-bold mb-4 text-dark">Financeiro Detalhado</h3>
+            <div class="row g-4">
+                <div class="col-md-6"><div class="card-kpi bg-primary text-white"><span>Receitas (Mês)</span><h2 class="text-white">R$ 28.500</h2></div></div>
+                <div class="col-md-6"><div class="card-kpi bg-dark text-white"><span>Despesas (Mês)</span><h2 class="text-white">R$ 13.079</h2></div></div>
+            </div>
+        </div>
+
+    </main>
 
     <script>
-        function mudar(id) {
-            document.querySelectorAll('.aba').forEach(a => a.classList.remove('ativa'));
-            document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('btn-ativa'));
-            document.getElementById(id).classList.add('ativa');
-            document.getElementById('b-' + id).classList.add('btn-ativa');
+        function tab(id) {
+            document.querySelectorAll('.aba').forEach(a => a.classList.remove('active'));
+            document.querySelectorAll('.sidebar button').forEach(b => b.classList.remove('btn-active'));
+            document.getElementById(id).classList.add('active');
+            if(document.getElementById('t-'+id)) document.getElementById('t-'+id).classList.add('btn-active');
         }
 
         window.onload = function() {
             // Povoar OS (36)
             let hOS = "";
             for(let i=1; i<=36; i++) {
-                hOS += `<tr><td>#30${i}</td><td>Cliente ${i}</td><td>Veículo Mod ${i}</td><td>R$ 450,00</td></tr>`;
+                let statusClass = i % 3 == 0 ? 'bg-success-subtle text-success' : 'bg-warning-subtle text-warning text-dark';
+                let statusText = i % 3 == 0 ? 'Concluído' : 'Em Manutenção';
+                hOS += `<tr><td><strong>#30${i}</strong></td><td>Cliente ${i}</td><td>Hilux SW4 <span class="placa">MZZ-${2000+i}</span></td><td><span class="badge-status ${statusClass}">${statusText}</span></td><td>R$ 450,00</td></tr>`;
             }
             document.getElementById('corpoOS').innerHTML = hOS;
 
-            // Povoar Clientes (50)
-            let hCLI = "";
-            const n = ["Márcio", "Felipe", "Adriano", "Carla", "Roberto"];
+            // Povoar 50 Clientes
+            let hCli = "";
+            const nomes = ["Márcio", "Felipe", "Adriano", "Carla", "Roberto", "Ana", "Ricardo", "Juliana", "Marcos", "Patrícia"];
             for(let i=1; i<=50; i++) {
-                hCLI += `<tr><td>${n[i%5]} ${i}</td><td>Carro ${i}</td><td><span class="placa">MZZ-${1000+i}</span></td></tr>`;
+                hCli += `<tr><td class="fw-bold">${nomes[i%10]} ${i}</td><td>Toyota Corolla <span class="placa">ABC-${1000+i}</span></td><td>17/02/2026</td></tr>`;
             }
-            document.getElementById('corpoCLI').innerHTML = hCLI;
+            document.getElementById('corpoCli').innerHTML = hCli;
         }
     </script>
 </body>
