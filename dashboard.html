@@ -35,6 +35,7 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .stock-low { color: #dc3545; font-weight: bold; }
+        .placa-badge { background: #e9ecef; color: #495057; font-weight: 700; font-family: monospace; padding: 4px 8px; border-radius: 4px; border: 1px solid #ced4da; }
         
         @media (max-width: 768px) {
             .sidebar { margin-left: -260px; }
@@ -70,18 +71,18 @@
     <div class="main-content">
         
         <div id="resumo" class="page-section active">
-            <h3 class="fw-bold mb-4">Painel Geral</h3>
+            <h3 class="fw-bold mb-4">Resumo Operacional</h3>
             <div class="row g-4">
                 <div class="col-md-4">
                     <div class="card border-0 shadow-sm p-4">
-                        <small class="text-muted fw-bold">CLIENTES ATIVOS</small>
+                        <small class="text-muted fw-bold">CLIENTES</small>
                         <h2 class="text-primary fw-bold">124</h2>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="card border-0 shadow-sm p-4">
-                        <small class="text-muted fw-bold">OS ABERTAS</small>
-                        <h2 class="text-warning fw-bold">12</h2>
+                        <small class="text-muted fw-bold">FATURAMENTO</small>
+                        <h2 class="text-success fw-bold">R$ 1.850</h2>
                     </div>
                 </div>
             </div>
@@ -103,45 +104,41 @@
 
         <div id="clientes" class="page-section">
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h3 class="fw-bold">Gestão de Clientes</h3>
-                <button class="btn btn-primary" onclick="alert('Novo Cliente - Demo')">+ Adicionar Cliente</button>
+                <h3 class="fw-bold">Base de Clientes</h3>
+                <button class="btn btn-primary" onclick="alert('Funcionalidade Demo')">+ Novo Cadastro</button>
             </div>
             <div class="card border-0 shadow-sm">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>Nome do Cliente</th>
-                                <th>Veículo</th>
-                                <th>Telefone</th>
+                                <th>Nome</th>
+                                <th>Veículo / Placa</th>
+                                <th>Telemóvel</th>
                                 <th>Última Visita</th>
                                 <th>Ações</th>
                             </tr>
                         </thead>
-                        <tbody id="corpoClientes">
-                            </tbody>
+                        <tbody id="corpoClientes"></tbody>
                     </table>
                 </div>
             </div>
         </div>
-
     </div>
 
     <script>
-        // Dados de Exemplo
         const pecas = [
             { nome: 'Óleo 5W30 Sintético', qtd: 45, min: 10 },
             { nome: 'Filtro de Óleo - Corolla', qtd: 3, min: 5 }
         ];
 
         const clientes = [
-            { nome: 'Márcio Rodrigues', carro: 'Hilux SW4', tel: '(62) 99999-0000', data: '10/02/2026' },
-            { nome: 'Felipe Oliveira', carro: 'Toyota Corolla', tel: '(62) 98888-1111', data: '15/02/2026' },
-            { nome: 'Ana Beatriz', carro: 'Jeep Compass', tel: '(62) 97777-2222', data: '05/01/2026' }
+            { nome: 'Márcio Rodrigues', carro: 'Hilux SW4', placa: 'ABC-1234', tel: '62999990000', data: '10/02/2026' },
+            { nome: 'Felipe Oliveira', carro: 'Toyota Corolla', placa: 'XYZ-5678', tel: '62988881111', data: '15/02/2026' },
+            { nome: 'Ana Beatriz', carro: 'Jeep Compass', placa: 'JJJ-0099', tel: '62977772222', data: '05/01/2026' }
         ];
 
         function atualizarTabelas() {
-            // Atualiza Estoque
             const cEstoque = document.getElementById('corpoEstoque');
             if(cEstoque) {
                 cEstoque.innerHTML = pecas.map(p => `
@@ -153,17 +150,16 @@
                 `).join('');
             }
 
-            // Atualiza Clientes
             const cClientes = document.getElementById('corpoClientes');
             if(cClientes) {
                 cClientes.innerHTML = clientes.map(c => `
                     <tr>
                         <td class="fw-bold">${c.nome}</td>
-                        <td>${c.carro}</td>
+                        <td>${c.carro} <br> <span class="placa-badge">${c.placa}</span></td>
                         <td>${c.tel}</td>
                         <td>${c.data}</td>
                         <td>
-                            <a href="https://wa.me/55${c.tel.replace(/\D/g,'')}" target="_blank" class="btn btn-sm btn-success"><i class="fab fa-whatsapp"></i></a>
+                            <a href="https://wa.me/55${c.tel}" target="_blank" class="btn btn-sm btn-success"><i class="fab fa-whatsapp"></i></a>
                             <button class="btn btn-sm btn-light border"><i class="fas fa-edit"></i></button>
                         </td>
                     </tr>
@@ -183,7 +179,6 @@
             document.getElementById('sidebar').classList.toggle('active');
         }
 
-        // Inicia
         atualizarTabelas();
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
