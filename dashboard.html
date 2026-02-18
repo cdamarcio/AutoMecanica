@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MazzSys ERP - Gestão de Estoque</title>
-    
+    <title>MazzSys ERP - Dashboard</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -17,27 +16,25 @@
             width: 260px; height: 100vh; position: fixed;
             background: var(--sidebar-bg); color: white; transition: 0.3s; z-index: 1000;
         }
+        .sidebar-brand { padding: 25px; text-align: center; border-bottom: 1px solid #333; }
         .sidebar a {
             padding: 15px 25px; display: block; color: #adb5bd; text-decoration: none;
-            border-left: 4px solid transparent; cursor: pointer;
+            border-left: 4px solid transparent; cursor: pointer; transition: 0.2s;
         }
         .sidebar a:hover, .sidebar a.active {
             background: #2c3136; color: white; border-left-color: var(--accent);
         }
 
-        /* Content */
+        /* Content Area */
         .main-content { margin-left: 260px; padding: 30px; transition: 0.3s; }
 
-        /* Section Toggle */
+        /* Alternância de Telas */
         .page-section { display: none; }
-        .page-section.active { display: block; animation: fadeIn 0.5s; }
+        .page-section.active { display: block; }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* Stock Cards */
+        /* Estilos de Estoque */
         .stock-low { color: #dc3545; font-weight: bold; }
-        .badge-stock { padding: 5px 10px; border-radius: 20px; font-size: 12px; }
-
+        
         @media (max-width: 768px) {
             .sidebar { margin-left: -260px; }
             .sidebar.active { margin-left: 0; }
@@ -50,18 +47,23 @@
     <div class="bg-dark text-white p-3 d-md-none fixed-top d-flex justify-content-between">
         <span class="fw-bold">MAZZSYS ERP</span>
         <button class="btn btn-outline-light btn-sm" onclick="toggleSidebar()">
-            <i class="fas fa-bars"></i>
+            <i class="fas fa-bars"></i> Menu
         </button>
     </div>
 
     <div class="sidebar" id="sidebar">
-        <div class="p-4 text-center border-bottom border-secondary">
+        <div class="sidebar-brand">
             <h4 class="text-primary fw-bold mb-0">MAZZSYS</h4>
-            <small class="text-muted">Painel Administrativo</small>
+            <small class="text-muted">Engenharia & Mecânica</small>
         </div>
         <nav class="mt-3">
-            <a onclick="showSection('resumo')" id="link-resumo" class="active"><i class="fas fa-chart-pie me-2"></i> Resumo</a>
-            <a onclick="showSection('estoque')" id="link-estoque"><i class="fas fa-box-open me-2"></i> Estoque de Peças</a>
+            <a onclick="showSection('resumo')" id="link-resumo" class="active">
+                <i class="fas fa-chart-line me-2"></i> Dashboard
+            </a>
+            <a onclick="showSection('estoque')" id="link-estoque">
+                <i class="fas fa-box me-2"></i> Estoque de Peças
+            </a>
+            <a href="#"><i class="fas fa-clipboard-list me-2"></i> Ordens de Serviço</a>
             <a href="#"><i class="fas fa-users me-2"></i> Clientes</a>
             <hr class="mx-3 border-secondary">
             <a href="index.html" class="text-danger"><i class="fas fa-sign-out-alt me-2"></i> Sair</a>
@@ -71,18 +73,18 @@
     <div class="main-content">
         
         <div id="resumo" class="page-section active">
-            <h3 class="fw-bold mb-4">Dashboard</h3>
+            <h3 class="fw-bold mb-4">Bem-vindo, Márcio</h3>
             <div class="row g-4">
                 <div class="col-md-4">
-                    <div class="card border-0 shadow-sm p-3">
-                        <small class="text-muted fw-bold">FATURAMENTO HOJE</small>
-                        <h2 class="text-success fw-bold">R$ 1.250,00</h2>
+                    <div class="card border-0 shadow-sm p-4">
+                        <small class="text-muted fw-bold">FATURAMENTO</small>
+                        <h2 class="text-success fw-bold">R$ 1.850,00</h2>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <div class="card border-0 shadow-sm p-3 text-primary">
-                        <small class="text-muted fw-bold">SERVIÇOS EM ANDAMENTO</small>
-                        <h2 class="fw-bold">08 Veículos</h2>
+                    <div class="card border-0 shadow-sm p-4">
+                        <small class="text-muted fw-bold">CARROS NO PÁTIO</small>
+                        <h2 class="text-primary fw-bold">08 Veículos</h2>
                     </div>
                 </div>
             </div>
@@ -91,9 +93,7 @@
         <div id="estoque" class="page-section">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h3 class="fw-bold">Controle de Estoque</h3>
-                <button class="btn btn-primary btn-sm" onclick="alert('Função de cadastro de peça - Demo')">
-                    <i class="fas fa-plus me-1"></i> Nova Peça
-                </button>
+                <button class="btn btn-primary" onclick="alert('Funcionalidade Demo')">+ Adicionar Peça</button>
             </div>
 
             <div class="card border-0 shadow-sm">
@@ -102,15 +102,14 @@
                         <thead class="table-light">
                             <tr>
                                 <th>Cód.</th>
-                                <th>Descrição da Peça</th>
+                                <th>Peça</th>
                                 <th>Categoria</th>
-                                <th>Qtd Atual</th>
-                                <th>Mínimo</th>
-                                <th>Preço (Venda)</th>
+                                <th>Qtd.</th>
                                 <th>Status</th>
+                                <th>Preço</th>
                             </tr>
                         </thead>
-                        <tbody id="listaEstoque">
+                        <tbody id="corpoEstoque">
                             </tbody>
                     </table>
                 </div>
@@ -120,65 +119,60 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
     <script>
-        // Dados de Exemplo para o Estoque
+        // Dados do Estoque
         const pecas = [
-            { id: '001', nome: 'Óleo 5W30 Sintético', cat: 'Lubrificantes', qtd: 45, min: 10, preco: 55.00 },
-            { id: '002', nome: 'Filtro de Óleo - Corolla', cat: 'Filtros', qtd: 4, min: 5, preco: 38.00 },
-            { id: '003', nome: 'Pastilha de Freio Diant.', cat: 'Freios', qtd: 12, min: 4, preco: 180.00 },
-            { id: '004', nome: 'Lâmpada H7 Philips', cat: 'Elétrica', qtd: 2, min: 5, preco: 45.00 },
-            { id: '005', nome: 'Correia Dentada Gates', cat: 'Motor', qtd: 8, min: 3, preco: 210.00 }
+            { id: '101', nome: 'Óleo 5W30 Sintético', cat: 'Lubrificantes', qtd: 45, min: 10, preco: 55.00 },
+            { id: '102', nome: 'Filtro de Óleo - Corolla', cat: 'Filtros', qtd: 3, min: 5, preco: 38.00 },
+            { id: '103', nome: 'Pastilha Freio Dianteira', cat: 'Freios', qtd: 12, min: 4, preco: 185.00 },
+            { id: '104', nome: 'Lâmpada H7 Philips', cat: 'Elétrica', qtd: 2, min: 5, preco: 45.00 }
         ];
 
-        // Função para carregar o estoque na tabela
-        function carregarEstoque() {
-            const tabela = document.getElementById('listaEstoque');
-            tabela.innerHTML = '';
+        // Função para carregar os dados na tabela
+        function atualizarTabela() {
+            const corpo = document.getElementById('corpoEstoque');
+            corpo.innerHTML = '';
 
             pecas.forEach(p => {
-                const statusBaixo = p.qtd <= p.min;
-                tabela.innerHTML += `
+                const baixoEstoque = p.qtd <= p.min;
+                corpo.innerHTML += `
                     <tr>
-                        <td class="small text-muted">#${p.id}</td>
+                        <td class="text-muted">#${p.id}</td>
                         <td class="fw-bold">${p.nome}</td>
-                        <td><span class="badge bg-light text-dark border">${p.cat}</span></td>
-                        <td class="${statusBaixo ? 'stock-low' : ''}">${p.qtd} un</td>
-                        <td>${p.min}</td>
-                        <td>R$ ${p.preco.toFixed(2)}</td>
+                        <td>${p.cat}</td>
+                        <td class="${baixoEstoque ? 'stock-low' : ''}">${p.qtd} un</td>
                         <td>
-                            <span class="badge ${statusBaixo ? 'bg-danger' : 'bg-success'}">
-                                ${statusBaixo ? 'REPOR URGENTE' : 'OK'}
+                            <span class="badge ${baixoEstoque ? 'bg-danger' : 'bg-success'}">
+                                ${baixoEstoque ? 'REPOR' : 'OK'}
                             </span>
                         </td>
+                        <td>R$ ${p.preco.toFixed(2)}</td>
                     </tr>
                 `;
             });
         }
 
-        // Função para alternar entre as páginas
-        function showSection(sectionId) {
-            // Esconde todas as seções
-            document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+        // Função para mudar de tela
+        function showSection(id) {
+            // Esconde todas as telas
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.remove('active'));
             // Desativa links do menu
             document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
-            
-            // Ativa a seção e o link clicado
-            document.getElementById(sectionId).classList.add('active');
-            document.getElementById('link-' + sectionId).classList.add('active');
 
-            if(sectionId === 'estoque') carregarEstoque();
-            
-            // Fecha o menu no celular após clicar
-            if(window.innerWidth < 768) toggleSidebar();
+            // Ativa a tela escolhida
+            document.getElementById(id).classList.add('active');
+            document.getElementById('link-' + id).classList.add('active');
+
+            if(id === 'estoque') atualizarTabela();
+            if(window.innerWidth < 768) toggleSidebar(); // Fecha menu no mobile
         }
 
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('active');
         }
 
-        // Inicia carregando o estoque por segurança
-        carregarEstoque();
+        // Inicializa a tabela
+        atualizarTabela();
     </script>
 </body>
 </html>
